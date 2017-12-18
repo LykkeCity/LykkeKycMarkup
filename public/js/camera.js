@@ -7,8 +7,9 @@ if ($('.camera_stream').length) {
     take_photo_btn = document.querySelector('._take_photo'),
     delete_photo_btn = document.querySelector('._delete_photo'),
     use_photo_btn = document.querySelector('._use_photo'),
-    error_message = document.querySelector('._camera_message');
-  var localStream, savePhotoSrc, saveRelatedTarget;
+    error_message = document.querySelector('._camera_message'),
+    camera_title = document.querySelector('._camera_title');
+  var localStream, savePhotoSrc, saveRelatedTarget, action, group;
 
   navigator.getMedia = ( navigator.getUserMedia ||
     navigator.webkitGetUserMedia ||
@@ -146,17 +147,43 @@ if ($('.camera_stream').length) {
     initCamera();
 
     saveRelatedTarget = event.relatedTarget;
+    action = $(saveRelatedTarget).data('action');
+    group = $(saveRelatedTarget).data('group');
+
+    var title = $(event.relatedTarget).closest($('.fileupload')).find(".fileupload__title").text();
+    camera_title.textContent = title;
   });
 
   $('#camera').on('hide.bs.modal', function (event) {
+    hideUI();
+
+    localStream.getVideoTracks()[0].stop();
+    saveRelatedTarget = null;
+    camera_title.textContent = ''
+  });
+
+  use_photo_btn.addEventListener("click", function(e){
+    e.preventDefault();
+
     $(saveRelatedTarget)
       .closest($('.fileupload'))
       .removeClass('fileupload--fail')
       .addClass('fileupload--uploaded')
-      .attr('style', 'background-image: url('+savePhotoSrc+')');
+      .attr('style', 'background-image: url(' + savePhotoSrc + ')');
+
+    $(saveRelatedTarget).closest($('.fileupload')).find(".fileupload__field").val(savePhotoSrc);
 
     hideUI();
 
     localStream.getVideoTracks()[0].stop();
-  })
+    saveRelatedTarget = null;
+
+    $('#camera').modal('hide');
+
+    if (action === 'front') {
+      setTimeout(function () {
+        $('[data-action="back"][data-group='+group+']').click()
+      }, 700);
+    }
+  });
 }

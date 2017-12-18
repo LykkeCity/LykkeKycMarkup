@@ -10,6 +10,19 @@
     display: none;
   }
 
+  &__title {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #fff;
+    font-weight: 600;
+    font-size: 20px;
+    z-index: 9999999;
+    pointer-events: none;
+  }
+
   &__frame {
     width: 60%;
     height: 60%;

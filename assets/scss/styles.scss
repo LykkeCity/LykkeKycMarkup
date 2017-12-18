@@ -8,13 +8,13 @@
 @import '../../node_modules/LykkeFramework/assets/scss/partials/blocks/lists';
 @import '../../node_modules/LykkeFramework/assets/scss/partials/blocks/apps';
 @import '../../node_modules/LykkeFramework/assets/scss/partials/modal';
+@import '../../node_modules/LykkeFramework/assets/scss/partials/labels';
 
 @import 'modal';
 @import 'kyc';
 @import 'camera';
 
 .header {
-  border-bottom: 0;
 }
 
 @media (max-width: 543px) {
@@ -25,16 +25,8 @@
 
 
 body {
-  padding-bottom: 420px;
+  padding-bottom: 20px;
 }
-
-
-@media (max-width: 543px) {
-  body {
-    padding-bottom: 800px;
-  }
-}
-
 
 .form-control {
   -webkit-appearance: none;

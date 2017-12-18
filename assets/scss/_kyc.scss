@@ -68,6 +68,12 @@
 
     @include background-size(cover);
 
+    &__file_field {
+      position: absolute;
+      opacity: 0;
+      visibility: hidden;
+    }
+
     &__notice {
       position: absolute;
       font-weight: $fw-semi;

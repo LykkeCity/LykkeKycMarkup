@@ -226,7 +226,8 @@ function initFileUpload() {
           $(id).parents('.fileupload')
             .removeClass('fileupload--fail')
             .addClass('fileupload--uploaded')
-            .attr('style', 'background-image: url('+ e.target.result +')');
+            .attr('style', 'background-image: url('+ e.target.result +')')
+            .find(".fileupload__field").val(e.target.result);
         }
 
         reader.readAsDataURL(input.files[0]);
