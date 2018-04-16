@@ -1,5 +1,5 @@
 if ($('.camera_stream').length) {
-// References to all the element we will need.
+  // References to all the element we will need.
   var video = document.querySelector('._camera_video'),
     image = document.querySelector('._camera_snap'),
     controls = document.querySelector('._camera_controls'),
@@ -9,9 +9,18 @@ if ($('.camera_stream').length) {
     use_photo_btn = document.querySelector('._use_photo'),
     error_message = document.querySelector('._camera_message'),
     camera_title = document.querySelector('._camera_title');
-  var localStream, savePhotoSrc, saveRelatedTarget, action, group;
+  var localStream, savePhotoSrc, saveRelatedTarget, action, group, title;
 
-  navigator.getMedia = ( navigator.getUserMedia ||
+  video.setAttribute("autoplay", "");
+  video.setAttribute("muted", "");
+  video.setAttribute("playsinline", true);
+  video.setAttribute("controls", true);
+
+  setTimeout(function () {
+    video.removeAttribute("controls");
+  });
+
+  navigator.getMedia = (navigator.getUserMedia ||
     navigator.webkitGetUserMedia ||
     navigator.mozGetUserMedia ||
     navigator.msGetUserMedia);
@@ -40,7 +49,7 @@ if ($('.camera_stream').length) {
     deletePhoto();
   }
 
-  function takeSnapshot(){
+  function takeSnapshot() {
     // Here we're using a trick that involves a hidden canvas element.
 
     var hidden_canvas = document.querySelector('canvas'),
@@ -73,9 +82,9 @@ if ($('.camera_stream').length) {
     video.play();
   }
 
-  function displayErrorMessage(error_msg, error){
+  function displayErrorMessage(error_msg, error) {
     error = error || "";
-    if(error){
+    if (error) {
       console.error(error);
     }
 
@@ -85,7 +94,7 @@ if ($('.camera_stream').length) {
     error_message.classList.add("visible");
   }
 
-  function hideUI(){
+  function hideUI() {
     controls.classList.remove("visible");
     take_photo_btn.classList.remove("visible");
     video.classList.remove("visible");
@@ -97,13 +106,13 @@ if ($('.camera_stream').length) {
 
   function initCamera() {
     // The getUserMedia interface is used for handling camera input.
-// Some browsers need a prefix so here we're covering all the options
+    // Some browsers need a prefix so here we're covering all the options
 
 
-    if(!navigator.getMedia){
+    if (!navigator.getMedia) {
       displayErrorMessage("Your browser doesn't have support for the navigator.getUserMedia interface.");
     }
-    else{
+    else {
 
       // Request the camera.
       navigator.getMedia(
@@ -111,7 +120,7 @@ if ($('.camera_stream').length) {
           video: true
         },
         // Success Callback
-        function(stream){
+        function (stream) {
           localStream = stream;
           // Create an object URL for the video stream and
           // set it as src of our HTLM video element.
@@ -119,52 +128,19 @@ if ($('.camera_stream').length) {
 
           // Play the video element to start the stream.
           video.play();
-          video.onplay = function() {
+          video.onplay = function () {
             showVideo();
           };
         },
         // Error Callback
-        function(err){
+        function (err) {
           displayErrorMessage("There was an error with accessing the camera stream: " + err.name, err);
         }
       );
     }
   }
 
-
-  take_photo_btn.addEventListener("click", function(e){
-    e.preventDefault();
-    takePhoto();
-  });
-
-
-  delete_photo_btn.addEventListener("click", function(e){
-    e.preventDefault();
-    deletePhoto();
-  });
-
-  $('#camera').on('show.bs.modal', function (event) {
-    initCamera();
-
-    saveRelatedTarget = event.relatedTarget;
-    action = $(saveRelatedTarget).data('action');
-    group = $(saveRelatedTarget).data('group');
-
-    var title = $(event.relatedTarget).closest($('.fileupload')).find(".fileupload__title").text();
-    camera_title.textContent = title;
-  });
-
-  $('#camera').on('hide.bs.modal', function (event) {
-    hideUI();
-
-    localStream.getVideoTracks()[0].stop();
-    saveRelatedTarget = null;
-    camera_title.textContent = ''
-  });
-
-  use_photo_btn.addEventListener("click", function(e){
-    e.preventDefault();
-
+  function usePhoto() {
     $(saveRelatedTarget)
       .closest($('.fileupload'))
       .removeClass('fileupload--fail')
@@ -175,10 +151,49 @@ if ($('.camera_stream').length) {
 
     hideUI();
 
+    $(saveRelatedTarget).closest('.fileupload').children(".fileupload__field").val(savePhotoSrc);
+    $(saveRelatedTarget).closest('.fileupload').children(".use-file").val("false");
+    $(saveRelatedTarget).closest('.fileupload').children(".use-camera").val("true");
+    $(saveRelatedTarget).closest('.fileupload').children(".file-extension").val('png');
+
     localStream.getVideoTracks()[0].stop();
     saveRelatedTarget = null;
 
     $('#camera').modal('hide');
+  }
+
+  take_photo_btn.addEventListener("click", function (e) {
+    e.preventDefault();
+    takePhoto();
+  });
+
+
+  delete_photo_btn.addEventListener("click", function (e) {
+    e.preventDefault();
+    deletePhoto();
+  });
+
+  $('#camera').on('show.bs.modal', function (event) {
+    initCamera();
+
+    saveRelatedTarget = event.relatedTarget;
+    action = $(saveRelatedTarget).data('action');
+    group = $(saveRelatedTarget).data('group');
+    title = $(event.relatedTarget).closest($('.fileupload')).find(".fileupload__title").text();
+    camera_title.textContent = title;
+  });
+
+  $('#camera').on('hide.bs.modal', function () {
+    hideUI();
+
+    localStream.getVideoTracks()[0].stop();
+    saveRelatedTarget = null;
+    camera_title.textContent = ''
+  });
+
+  use_photo_btn.addEventListener("click", function (e) {
+    e.preventDefault();
+    usePhoto();
 
     if (action === 'front') {
       setTimeout(function () {

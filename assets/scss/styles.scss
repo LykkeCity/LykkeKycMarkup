@@ -9,10 +9,12 @@
 @import '../../node_modules/LykkeFramework/assets/scss/partials/blocks/apps';
 @import '../../node_modules/LykkeFramework/assets/scss/partials/modal';
 @import '../../node_modules/LykkeFramework/assets/scss/partials/labels';
+@import '../../node_modules/LykkeFramework/assets/scss/partials/status_icon';
 
 @import 'modal';
 @import 'kyc';
 @import 'camera';
+@import 'blocks/status';
 
 .header {
 }

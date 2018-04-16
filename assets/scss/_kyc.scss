@@ -167,12 +167,13 @@
   }
 
   @media all and (max-width: 400px) {
-    .row > div {
-      width: 100%;
-    }
+    .row {
+      margin-left: -5px;
+      margin-right: -5px;
 
-    .fileupload {
-      padding-bottom: 60%;
+      .col-xs-6 {
+        padding: 0 5px;
+      }
     }
   }
 }
