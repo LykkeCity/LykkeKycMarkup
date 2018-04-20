@@ -1,0 +1,74 @@
+$loading-duration: 600s;
+
+.pie {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  overflow: hidden;
+  border-radius: 100%;
+  background-color: #f3f4f5;
+
+  @include transform(translate3d(0,0,0));
+
+  &--orange {
+    .pie_circle-right,
+    .pie_circle-left {
+      background-color: #ffae2c;
+    }
+  }
+}
+
+.pie_inner {
+  height: 100%;
+}
+
+.pie_half {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.pie_half-left {
+  left: 0;
+  right: auto;
+}
+
+.pie_circle-right,
+.pie_circle-left {
+  float: left;
+  width: 200%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #0388ef;
+  overflow: hidden;
+}
+
+.pie_circle-right {
+  float: right;
+}
+
+.pie_blocker-1,
+.pie_blocker-2 {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 200%;
+  height: 200%;
+  background-color: #f3f4f5;
+  -webkit-transform:
+    rotate(0deg)
+    translate(0, -25%);
+}
+
+.pie_blocker-1 {
+  -webkit-transform-origin: 0 25%;
+}
+
+.pie_blocker-2 {
+  left: auto;
+  right: 0;
+  -webkit-transform-origin: 100% 25%;
+}

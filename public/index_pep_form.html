@@ -159,9 +159,12 @@
           <p class="lead">Lykke requests additional user details to comply with kyc/aml regulations. Please upload your documents to enable deposits and withdrawals for your account. The tier level of transaction limits increases when you provide more information about yourself.</p>
 
           <div class="steps_list">
-            <div class="steps_item steps_item--active">
+            <div class="steps_item steps_item--editable">
+              <div class="steps_item__edit">
+                <button class="btn btn--icon" type="button"><i class="icon icon--edit_alt"></i></button>
+              </div>
               <div class="steps_item__title">Due Diligence</div>
-              <div class="steps_item__content">
+              <div class="steps_item__content hide">
                 <ul>
                   <li>Please download the form:
                     <div class="asset_link">
@@ -203,8 +206,50 @@
               </div>
             </div>
 
-            <div class="steps_item">
+            <div class="steps_item steps_item--active">
               <div class="steps_item__title">PEP form</div>
+              <div class="steps_item__content">
+                <ul>
+                  <li>Please download the form:
+                    <div class="asset_link">
+                      <a href="">
+                        <span class="asset_link__title">Download PEP form <i class="icon icon--download_alt"></i></span>
+                        <span class="asset_link__hint">(1.4MB)</span>
+                      </a>
+                    </div>
+                  </li>
+                  <li>Complete the relevant sections</li>
+                  <li>Sign the bottom of the page</li>
+                  <li>Upload the electronic copy of the document</li>
+                </ul>
+                <div class="hint">Take photo, upload a local image (.png or .jpg) or file (.pdf) limited to 3Mb.</div>
+                <div class="split_buttons">
+                  <button class="btn btn--icon" type="button">
+                    <i class="icon icon--photo"></i> Take a photo
+                  </button>
+                  <button class="btn btn--icon" type="button">
+                    <i class="icon icon--upload"></i> Upload...
+                  </button>
+                </div>
+
+                <div class="files_list">
+                  <div class="file_item">
+                    <div class="file_item__wrapper">
+                      <div class="file_item__icon file_item__icon--preview">
+                        <img src="http://lorempixel.com/40/40/" alt="preview">
+                      </div>
+                      <div class="file_item__content">
+                        <div class="file_item__title">my_PEP_form.png</div>
+                        <div class="file_item__desc">1.8 MB</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="steps_item__button">
+                  <button class="btn btn--primary" type="button">Submit</button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -213,6 +258,7 @@
     </div>
   </section>
 </article>
+
 
 <script src="/js/vendor/jquery.min.js"></script>
 <script src="/js/vendor/bootstrap.min.js"></script>

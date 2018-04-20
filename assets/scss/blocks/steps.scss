@@ -1,0 +1,330 @@
+.steps_list {
+  counter-reset: section;
+  list-style-type: none;
+  width: 755px;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+
+  @include rem(padding, 35px 0);
+}
+
+.steps_item {
+  position: relative;
+
+  @include rem(padding, 3px 85px 80px 80px);
+
+  &__title {
+    font-weight: bold;
+    line-height: 1;
+    color: #111111;
+    font-family: $ff-alt;
+
+    @include rem(font-size, 30px);
+    @include rem(margin-bottom, 20px);
+  }
+
+  ul {
+    line-height: 1.67;
+    color: $text;
+
+    @include rem(font-size, 18px);
+    @include rem(margin-bottom, 24px);
+    @include rem(padding-left, 25px);
+
+    li {
+      list-style-type: disc;
+
+      @include rem(margin-bottom, 15px);
+    }
+  }
+
+  .btn--primary {
+    min-width: 140px;
+  }
+
+  .asset_link {
+    @include rem(margin-top, 10px);
+  }
+
+  .hint {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #8c94a0;
+
+    @include rem(margin-bottom, 30px);
+    @include rem(font-size, 16px);
+  }
+
+  &__edit {
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #fff;
+    border-radius: 100px;
+    background-color: $primary;
+    text-align: center;
+    z-index: 3;
+
+    @include rem(width, 40px);
+    @include rem(height, 40px);
+
+    @include transition($transition-default);
+
+    &:hover {
+      @include scale(1.1);
+    }
+
+    .btn {
+      width: 100%;
+      height: 100%;
+
+      @include rem(padding, 10px);
+
+      .icon {
+        color: $white;
+      }
+    }
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    height: 100%;
+    border-left: 1px solid #ebedef;
+    z-index: 1;
+
+    @include rem(left, 20px);
+  }
+
+
+  &:before {
+    counter-increment: section;
+    content: counters(section, "");
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-weight: bold;
+    line-height: 1.35;
+    color: #8c94a0;
+    border-radius: 100px;
+    font-family: $ff-alt;
+    background-color: #ebedef;
+    text-align: center;
+    z-index: 2;
+    box-shadow: 0 0 0 10px $white;
+
+    @include rem(font-size, 26px);
+    @include rem(width, 40px);
+    @include rem(height, 40px);
+  }
+
+  &--active {
+    @include rem(padding-bottom, 95px);
+
+    &:before {
+      color: $white;
+      background-color: $dark;
+    }
+  }
+
+  &:last-child {
+    &:after {
+      display: none;
+    }
+  }
+}
+
+.asset_link {
+  > a {
+    display: inline-block;
+  }
+
+  &__title {
+    font-weight: 600;
+    line-height: 1.67;
+    color: #0388ef;
+
+    @include rem(font-size, 18px);
+
+    .icon {
+      @include rem(font-size, 30px);
+    }
+  }
+
+  &__hint {
+    display: block;
+    line-height: 1;
+    color: rgba($secondary, .6);
+
+    @include rem(font-size, 16px);
+  }
+}
+
+.split_buttons {
+  width: auto;
+  display: inline-block;
+  max-width: 100%;
+  border-radius: 100px;
+  border: solid 1px #cfd2d7;
+
+  @include rem(margin-bottom, 30px);
+
+  .btn {
+    color: $black;
+    position: relative;
+
+    @include rem(font-size, 16px);
+    @include rem(padding, 15px 24px 15px 34px);
+
+    .icon {
+      @include rem(margin-right, 10px);
+    }
+
+    + .btn {
+      &:after {
+        content: '';
+        left: 0;
+        top: 50%;
+        position: absolute;
+        border-left: 1px solid #cfd2d7;
+
+        @include rem(height, 30px);
+        @include rem(margin-top, -15px);
+      }
+    }
+  }
+}
+
+.files_list {
+  max-width: 590px;
+
+  @include rem(margin-bottom, 40px);
+}
+
+.file_item {
+  position: relative;
+
+  @include rem(margin-bottom, 20px);
+
+  &--error {
+    .file_item__wrapper:after {
+      content: '';
+      left: -1px;
+      border-radius: 100px;
+      background-color: #ff3e2e;
+      height: auto;
+      position: absolute;
+
+      @include rem(width, 2px);
+      @include rem(top, 10px);
+      @include rem(bottom, 10px);
+    }
+  }
+
+  &__wrapper {
+    border-radius: 8px;
+    background-color: #ffffff;
+    position: relative;
+    box-shadow: 0 4px 15px 0 rgba(101, 113, 128, 0.2);
+
+    @include rem(padding, 30px 32px);
+  }
+
+  &__icon {
+    border-radius: 4px;
+    font-weight: 600;
+    line-height: 2.31;
+    letter-spacing: 1.6px;
+    color: #ffffff;
+    text-align: center;
+    float: left;
+    cursor: default;
+
+    @include rem(width, 40px);
+    @include rem(height, 40px);
+    @include rem(padding, 6px 4px);
+    @include rem(margin-right, 20px);
+    @include rem(font-size, 13px);
+    @include color-modifier(background-color);
+    
+    &--preview {
+      border: solid 1px #cfd2d7;
+      overflow: hidden;
+      padding: 0;
+      
+      img {
+        width: 100%;
+      }
+    }
+  }
+
+  &__action {
+    float: right;
+
+    @include rem(margin-right, -8px);
+
+    .btn {
+      color: $black;
+
+      .icon {
+        @include rem(font-size, 30px);
+      }
+    }
+  }
+
+  &__title {
+    font-weight: 600;
+    line-height: 1.39;
+    color: $black;
+
+    @include ellipsis();
+    @include rem(font-size, 18px);
+  }
+
+  &__desc {
+    line-height: 1.5;
+    color: #8c94a0;
+
+    @include rem(font-size, 16px);
+  }
+  
+  &__content {
+    overflow: hidden;
+
+    @include rem(padding-right, 20px);
+    @include rem(margin-top, -4px);
+    @include rem(margin-bottom, -6px);
+  }
+
+  &__error {
+    line-height: 1.54;
+    color: #ff3e2e;
+
+    @include rem(font-size, 13px);
+    @include rem(margin, 6px 0);
+  }
+}
+
+.btn--primary {
+  &[disabled] {
+    background-color: #f7f8f9 !important;
+    color: #8c94a0 !important;
+  }
+}
+
+.checkboxes_group {
+  @include rem(margin-bottom, 10px);
+  @include rem(margin-top, 30px);
+
+  .row {
+    margin-left: -5px;
+    margin-right: -5px;
+
+    > div {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+  }
+}

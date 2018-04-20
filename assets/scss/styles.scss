@@ -14,9 +14,16 @@
 @import 'modal';
 @import 'kyc';
 @import 'camera';
+@import 'pie_loader';
 @import 'blocks/status';
+@import 'blocks/steps';
 
 .header {
+  border-bottom: 1px solid $border-alt;
+}
+
+.header_user__img {
+  @include rem(margin-right, 10px);
 }
 
 @media (max-width: 543px) {
@@ -41,6 +48,25 @@ body {
   }
 }
 
+.page .container {
+  width: 1250px;
+  max-width: 100%;
+}
+
 .page__subtitle {
   font-weight: normal;
+
+  @include rem(font-size, 30px);
+}
+
+.page__header {
+  @include rem(margin-bottom, 60px);
+}
+
+.page__title {
+  + .page__subtitle {
+    color: #657180 !important;
+
+    @include rem(margin-top, 20px);
+  }
 }

@@ -173,15 +173,13 @@ if ($('.camera_stream').length) {
     deletePhoto();
   });
 
-  $('#camera').on('show.bs.modal', function (event) {
-    initCamera();
+  initCamera();
+  saveRelatedTarget = event.relatedTarget;
+  action = $(saveRelatedTarget).data('action');
+  group = $(saveRelatedTarget).data('group');
+  title = $(event.relatedTarget).closest($('.fileupload')).find(".fileupload__title").text();
+  camera_title.textContent = title;
 
-    saveRelatedTarget = event.relatedTarget;
-    action = $(saveRelatedTarget).data('action');
-    group = $(saveRelatedTarget).data('group');
-    title = $(event.relatedTarget).closest($('.fileupload')).find(".fileupload__title").text();
-    camera_title.textContent = title;
-  });
 
   $('#camera').on('hide.bs.modal', function () {
     hideUI();

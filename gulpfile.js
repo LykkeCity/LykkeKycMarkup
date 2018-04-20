@@ -80,10 +80,6 @@ gulp.task('usemin', [
   'copy-scripts'
 ], function () {
   return gulp.src('./public/*.html')
-    .pipe(usemin({
-      js: [uglify()],
-      inlinejs: [uglify()]
-    }))
     .pipe(gulp.dest('./dist/'));
 });
 

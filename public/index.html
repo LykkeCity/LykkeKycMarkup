@@ -151,240 +151,68 @@
   <section class="section section--padding">
     <div class="container">
       <div class="row">
-        <div class="relative hidden-xs">
-          <a href="" class="btn_back">
-            <img src="img/back_icn.svg" width="30" height="12" alt="back">
-          </a>
-        </div>
-        <div class="col-sm-8 col-lg-6 automargin">
+        <div class="col-sm-8 col-lg-8 automargin">
           <div class="page__header">
-            <h1 class="h2 text-center page__title">KYC procedure</h1>
+            <h1 class="text-center page__title">KYC procedure</h1>
             <h3 class="h3 page__subtitle">Verify your account</h3>
           </div>
-          <p>Please select the type of document you plan to use during registration and make shoots of documents on your webcam. Сheck the quality of the photos and submit the form.</p>
-          <p><small class="text-muted">Allowed files type: pdf, png, jpg. File must be less than 3MB.</small></p>
-          <br>
-          <form class="form form--kyc">
-            <div class="row">
-              <div class="col-md-5">
-                <label for="radio" class="control-label">Type of document</label>
-                <input type="hidden" name="Type" value="Passport" />
-              </div>
-              <div class="col-md-7">
-                <div class="form-group">
-                  <div class="radio btn-block">
-                    <input type="radio" name="doc" id="radio" class="radio__control" value="Passport" checked="">
-                    <label for="radio" class="form-control control-label radio__label">Passport</label>
+          <p class="lead">Lykke requests additional user details to comply with kyc/aml regulations. Please upload your documents to enable deposits and withdrawals for your account. The tier level of transaction limits increases when you provide more information about yourself.</p>
+
+          <div class="steps_list">
+            <div class="steps_item steps_item--active">
+              <div class="steps_item__title">Due Diligence</div>
+              <div class="steps_item__content">
+                <ul>
+                  <li>Please download the form:
+                    <div class="asset_link">
+                      <a href="">
+                        <span class="asset_link__title">Download Due Diligence form <i class="icon icon--download_alt"></i></span>
+                        <span class="asset_link__hint">(2.8MB)</span>
+                      </a>
+                    </div>
+                  </li>
+                  <li>Complete the relevant sections</li>
+                  <li>Sign the bottom of the page</li>
+                  <li>Upload the electronic copy of the document</li>
+                </ul>
+                <div class="hint">Take photo, upload a local image (.png or .jpg) or file (.pdf) limited to 3Mb.</div>
+                <div class="split_buttons">
+                  <button class="btn btn--icon" type="button">
+                    <i class="icon icon--photo"></i> Take a photo
+                  </button>
+                  <button class="btn btn--icon" type="button">
+                    <i class="icon icon--upload"></i> Upload...
+                  </button>
+                </div>
+
+                <div class="files_list">
+                  <div class="file_item">
+                    <div class="file_item__wrapper">
+                      <div class="file_item__icon file_item__icon--red">PDF</div>
+                      <div class="file_item__content">
+                        <div class="file_item__title">my_due_diligence.pdf</div>
+                        <div class="file_item__desc">1.8 MB</div>
+                      </div>
+                    </div>
                   </div>
-                  <div class="radio btn-block">
-                    <input type="radio" name="doc" id="radio1" class="radio__control" value="ID">
-                    <label for="radio1" class="form-control control-label radio__label">ID</label>
-                  </div>
-                  <div class="radio btn-block">
-                    <input type="radio" name="doc" id="radio2" class="radio__control" value="DriverLicense">
-                    <label for="radio2" class="form-control control-label radio__label">Driver license</label>
-                  </div>
+                </div>
+
+                <div class="steps_item__button">
+                  <button class="btn btn--primary" type="button">Submit</button>
                 </div>
               </div>
             </div>
-            <div class="fileupload-group">
-              <div class="row">
-                <div id="passport-row">
-                  <input type="hidden" name="Passport.DocumentType" value="Passport_Photo" />
-                  <input type="hidden" name="Passport.Camera" value="value" />
-                  <input type="hidden" name="Passport.Upload" />
-                  <input type="hidden" name="Passport.IsValid" />
-                  <input type="hidden" name="Passport.Title" value="Photo of your passport" />
-                  <input type="hidden" name="Passport.Error" value="" />
-                  <div class="col-xs-6">
-                    <div class="form-group">
-                      <div class="fileupload">
-                        <input type="hidden" id="passport-hidden" class="fileupload__field" name="Passport.CameraData">
 
-                        <div class="fileupload__actions">
-                          <button type="button" class="btn btn--icon fileupload__btn hidden-xs hidden-sm" data-toggle="modal" data-target="#camera"><i class="icon icon--photo"></i></button>
-
-                        </div>
-                        <div class="fileupload__notice">
-                          <div class="fileupload__title">Photo of your passport</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div id="id-row">
-                  <input type="hidden" name="IdFront.DocumentType" value="ID_Front" />
-                  <input type="hidden" name="IdFront.Camera" value="value" />
-                  <input type="hidden" name="IdFront.Upload" />
-                  <input type="hidden" name="IdFront.IsValid" />
-                  <input type="hidden" name="IdFront.Title" value="Photo of front side of your ID" />
-                  <input type="hidden" name="IdFront.Error" value="" />
-                  <input type="hidden" id="idfront-hidden" class="fileupload__field" name="IdFront.CameraData">
-                  <div class="col-xs-6">
-                    <div class="form-group">
-                      <div class="fileupload">
-
-                        <div class="fileupload__actions">
-                          <button type="button" class="btn btn--icon fileupload__btn" data-action="front" data-group="upload-id" data-toggle="modal" data-target="#camera"><i class="icon icon--photo"></i></button>
-
-                        </div>
-                        <div class="fileupload__notice">
-                          <div class="fileupload__title">Photo of front side of your ID</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <input type="hidden" name="IdBack.DocumentType" value="ID_Back" />
-                  <input type="hidden" name="IdBack.Camera" value="value" />
-                  <input type="hidden" name="IdBack.Upload" />
-                  <input type="hidden" name="IdBack.IsValid" />
-                  <input type="hidden" name="IdBack.Title" value="Photo of back side of your ID" />
-                  <input type="hidden" name="IdBack.Error" value="" />
-                  <input type="hidden" id="idback-hidden" class="fileupload__field" name="IdFront.CameraData">
-                  <div class="col-xs-6">
-                    <div class="form-group">
-                      <div class="fileupload">
-
-                        <div class="fileupload__actions">
-                          <button type="button" class="btn btn--icon fileupload__btn" data-toggle="modal" data-action="back" data-group="upload-id" data-target="#camera"><i class="icon icon--photo"></i></button>
-                        </div>
-                        <div class="fileupload__notice">
-                          <div class="fileupload__title">Photo of back side of your ID</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div id="driverlicense-row">
-                  <input type="hidden" name="DriverLicenseFront.DocumentType" value="DL_Front" />
-                  <input type="hidden" name="DriverLicenseFront.Camera" value="value" />
-                  <input type="hidden" name="DriverLicenseFront.Upload" />
-                  <input type="hidden" name="DriverLicenseFront.IsValid" />
-                  <input type="hidden" name="DriverLicenseFront.Title" value="Photo of front side of your driving license" />
-                  <input type="hidden" name="DriverLicenseFront.Error" value="" />
-                  <div class="col-xs-6">
-                    <div class="form-group">
-                      <div class="fileupload">
-                        <input type="hidden" id="driverlicensefront-hidden" class="fileupload__field" name="DriverLicenseFront.CameraData">
-
-
-                        <div class="fileupload__actions">
-                          <button type="button" class="btn btn--icon fileupload__btn" data-toggle="modal" data-target="#camera" data-action="front" data-group="upload-license"><i class="icon icon--photo"></i></button>
-
-                        </div>
-                        <div class="fileupload__notice">
-                          <div class="fileupload__title">Photo of front side of your driving license</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-xs-6">
-                    <div class="form-group">
-                      <div class="fileupload">
-                        <input type="hidden" name="DriverLicenseBack.DocumentType" value="DL_Back" />
-                        <input type="hidden" name="DriverLicenseBack.Camera" value="value" />
-                        <input type="hidden" name="DriverLicenseBack.Upload" />
-                        <input type="hidden" name="DriverLicenseBack.IsValid" />
-                        <input type="hidden" name="DriverLicenseBack.Title" value="Photo of back side of your driving license" />
-                        <input type="hidden" name="DriverLicenseBack.Error" value="" />
-                        <input type="hidden" id="driverlicenseback-hidden" class="fileupload__field" name="DriverLicenseBack.CameraData">
-
-                        <div class="fileupload__actions">
-                          <button type="button" class="btn btn--icon fileupload__btn" data-toggle="modal" data-target="#camera" data-action="back" data-group="upload-license"><i class="icon icon--photo"></i></button>
-                        </div>
-                        <div class="fileupload__notice">
-                          <div class="fileupload__title">Photo of back side of your driving license</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div id="address-row">
-                  <input type="hidden" name="Address.DocumentType" value="Passport_Address" />
-                  <input type="hidden" name="Address.Camera" value="value" />
-                  <input type="hidden" name="Address.Upload" value="value" />
-                  <input type="hidden" name="Address.IsValid" />
-                  <input type="hidden" name="Address.Title" value="Photo of proof of address, e.g. utility bill" />
-                  <input type="hidden" name="Address.Error" value="Address can be a bank/credit card statement or a utility bill (water, gas, lanline, electricity)." />
-                  <div class="col-xs-6">
-                    <div class="form-group">
-                      <div class="fileupload">
-                        <input type="hidden" id="address-hidden" class="fileupload__field" name="Address.CameraData">
-                        <input type="file" id="address-file" class="fileupload__file_field" accept="image/*" name="Address.UploadData">
-
-                        <div class="fileupload__actions">
-                          <button type="button" class="btn btn--icon fileupload__btn hidden-xs hidden-sm" data-toggle="modal" data-target="#camera"><i class="icon icon--photo"></i></button>
-
-                          <button type="button" class="btn btn--icon fileupload__btn _upload_file" data-file-id="#address-file"><i class="icon icon--upload"></i></button>
-                        </div>
-                        <div class="fileupload__notice">
-                          <div class="fileupload__title">Photo of proof of address, e.g. utility bill</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div id="selfie-row">
-                  <input type="hidden" name="Selfie.DocumentType" value="Passport_Selfie" />
-                  <input type="hidden" name="Selfie.Camera" value="value" />
-                  <input type="hidden" name="Selfie.Upload" />
-                  <input type="hidden" name="Selfie.IsValid" />
-                  <input type="hidden" name="Selfie.Title" value="Selfie" />
-                  <input type="hidden" name="Selfie.Error" value="" />
-                  <div class="col-xs-6">
-                    <div class="form-group">
-                      <div class="fileupload">
-                        <input type="hidden" id="selfie-hidden" class="fileupload__field" name="Selfie.CameraData">
-
-
-                        <div class="fileupload__actions">
-                          <button type="button" class="btn btn--icon fileupload__btn hidden-xs hidden-sm" data-toggle="modal" data-target="#camera"><i class="icon icon--photo"></i></button>
-
-                        </div>
-                        <div class="fileupload__notice">
-                          <div class="fileupload__title">Selfie</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div class="steps_item">
+              <div class="steps_item__title">PEP form</div>
             </div>
-            <div class="submit-group">
-              <button class="btn btn-block" type="submit">Submit</button>
-              <button class="btn btn-block btn--flat" type="reset">Skip and fill later</button>
-            </div>
-          </form>
+          </div>
+
         </div>
       </div>
     </div>
   </section>
 </article>
-
-<div class="modal camera_modal fade" id="camera" tabindex="-1" role="dialog" aria-labelledby="cameraModalLabel">
-  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="icon icon--close"></i></button>
-  <div class="modal-body">
-    <div class="camera_stream">
-      <video class="camera_stream__video _camera_video" playsinline></video>
-      <div class="camera_stream__frame _camera_frame"></div>
-      <img class="camera_stream__snap _camera_snap">
-      <p class="camera_stream__title _camera_title"></p>
-      <p class="camera_stream__message _camera_message"></p>
-      <a href="#" class="btn btn--circle camera_stream__shoot _take_photo" title="Take Photo"><i class="icon icon--photo"></i></a>
-      <div class="camera_stream__controls _camera_controls">
-        <a href="#" class="btn btn--flat camera_stream__delete _delete_photo" title="Reshoot">Reshoot</a>
-        <a href="#" class="btn camera_stream__delete _use_photo" title="Use Photo">Use photo</a>
-      </div>
-      <canvas></canvas>
-    </div>
-  </div>
-</div>
-
-
-
-
-
 
 <script src="/js/vendor/jquery.min.js"></script>
 <script src="/js/vendor/bootstrap.min.js"></script>
@@ -392,40 +220,6 @@
 <script src="/js/functions.js"></script>
 <script src="/js/camera.js"></script>
 <!-- endbuild -->
-
-
-<script>
-  $(function () {
-    UpdateDocType();
-
-    $('input[name=doc]').on('change', function () {
-      UpdateDocType();
-    });
-
-    function UpdateDocType() {
-      var type = $('input[name=doc]:checked').val();
-      console.log(type);
-
-      if (type == "Passport") {
-        $("#passport-row").show();
-        $("#id-row").hide();
-        $("#driverlicense-row").hide();
-      }
-
-      if (type == "ID") {
-        $("#passport-row").hide();
-        $("#id-row").show();
-        $("#driverlicense-row").hide();
-      }
-
-      if (type == "DriverLicense") {
-        $("#passport-row").hide();
-        $("#id-row").hide();
-        $("#driverlicense-row").show();
-      }
-    }
-  })
-</script>
 
 </body>
 </html>

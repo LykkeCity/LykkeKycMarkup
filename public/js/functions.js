@@ -240,6 +240,67 @@ function initFileUpload() {
   })
 }
 
+function pie() {
+  if ($('.pie').length) {
+    function cssTransform(degs) {
+      return "rotate(" + degs + "deg) translate(0, -25%)";
+    }
+
+    var Pie = function(el, options, color = true) {
+      options = options || {};
+      options.color = options.color || 'white';
+      options.backgroundColor = options.backgroundColor || 'black';
+
+      this.el = el;
+      this.inner = this.el.querySelector('.pie_inner');
+      this.blocker1 = this.el.querySelector('.pie_blocker-1');
+      this.blocker2 = this.el.querySelector('.pie_blocker-2');
+      this.pieLeft = this.el.querySelector('.pie_circle-left');
+      this.pieRight = this.el.querySelector('.pie_circle-right');
+
+      if (color) {
+        this.pieLeft.style.backgroundColor = options.color;
+        this.pieRight.style.backgroundColor = options.color;
+      }
+
+      this.blocker1.style.backgroundColor = options.backgroundColor;
+      this.blocker2.style.backgroundColor = options.backgroundColor;
+
+    };
+
+    Pie.prototype.set = function(percentage) {
+      this.percentage = percentage
+      this.degs = 360 * this.percentage;
+
+      var degs1 = this.degs > 180 ? 180 : this.degs;
+      var degs2 = this.degs > 180 ? this.degs - 180 : 0;
+
+      this.blocker1.style.webkitTransform = cssTransform(degs1);
+      this.blocker2.style.webkitTransform = cssTransform(degs2);
+    };
+
+// DEMO
+
+    var pie = new Pie(document.querySelector('.pie'), {
+        mask: true,
+        color: '#0388ef',
+        backgroundColor: '#f3f4f5'
+      },
+      false
+    );
+
+    var percent = 0;
+
+    function incrementPie() {
+      if (percent >= 100) percent = 0;
+      pie.set(percent++ * 0.01);
+    }
+
+    setInterval(incrementPie, 600);
+  }
+}
+
+
 // Init
 
 $(document).ready(function() {
@@ -251,5 +312,6 @@ $(document).ready(function() {
   initSmoothScroll();
   initAffix();
   initFileUpload();
+  pie();
 });
 
