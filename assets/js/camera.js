@@ -189,7 +189,7 @@ if ($('.camera_stream').length) {
     camera_title.textContent = ''
   });
 
-  use_photo_btn.addEventListener("click", function (e) {
+/*  use_photo_btn.addEventListener("click", function (e) {
     e.preventDefault();
     usePhoto();
 
@@ -198,5 +198,5 @@ if ($('.camera_stream').length) {
         $('[data-action="back"][data-group='+group+']').click()
       }, 700);
     }
-  });
+  });*/
 }

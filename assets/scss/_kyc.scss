@@ -39,6 +39,7 @@
 
     .icon {
       display: block;
+      margin-right: 0;
 
       @include rem(font-size, 30px);
       @include rem(margin-bottom, 5px);

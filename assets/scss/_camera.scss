@@ -10,6 +10,26 @@
     display: none;
   }
 
+  &__delete {
+    overflow: visible;
+    padding-top: 0;
+    padding-bottom: 0;
+
+    .btn--circle {
+      @include rem(width, 50px);
+      @include rem(height, 50px);
+      @include rem(margin-left, 10px);
+
+      .icon {
+        @include rem(margin, -5px);
+      }
+    }
+
+    &_text {
+      @include rem(margin-left, -60px);
+    }
+  }
+
   &__title {
     position: absolute;
     top: 20px;
