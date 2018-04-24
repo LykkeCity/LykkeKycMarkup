@@ -206,24 +206,25 @@
                   <li>Driving license and Proof of Address should be separate documents</li>
                 </ul>
 
-
                 <div class="camera_item">
-
                   <div class="camera_stream">
                     <video class="camera_stream__video _camera_video" playsinline></video>
                     <div class="camera_stream__frame _camera_frame"></div>
-                    <img class="camera_stream__snap _camera_snap">
+                    <img class="camera_stream__snap camera_stream__snap--front _camera_snap">
+                    <img class="camera_stream__snap camera_stream__snap--back _camera_snap_back">
                     <p class="camera_stream__title _camera_title"></p>
                     <p class="camera_stream__message _camera_message"></p>
                     <a href="#" class="btn btn--circle camera_stream__shoot _take_photo" title="Take Photo"><i class="icon icon--photo"></i></a>
                     <div class="camera_stream__controls _camera_controls">
-                      <a href="#" class="btn btn--flat camera_stream__delete _delete_photo" title="Reshoot">
+                      <button type="button" class="btn btn--flat camera_stream__delete _delete_photo" title="Reshoot">
                         <span class="camera_stream__delete_text">Retake</span>
                         <span  class="btn btn--circle"><i class="icon icon--photo"></i></span>
-                      </a>
-
-
+                      </button>
                     </div>
+                    <button type="button" class="btn btn--flat camera_stream__back_btn _rotate_side" data-toggle-text="Front side">
+                      <i class="icon icon--exchange"></i>
+                      <span class="_text">Back side</span>
+                    </button>
                     <canvas></canvas>
                   </div>
 
@@ -393,6 +394,22 @@
         $("#id-row").hide();
         $("#driverlicense-row").show();
       }
+    }
+  });
+
+  var initialText = $('._rotate_side').text();
+
+  $('._rotate_side').on('click', function (e) {
+    e.preventDefault();
+
+    var textContainer = $(this).find('._text'),
+      newText = $(this).data('toggle-text');
+
+    if (textContainer.text() === newText) {
+      textContainer.text(initialText)
+    }
+    else {
+      textContainer.text(newText)
     }
   })
 </script>

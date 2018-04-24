@@ -1,35 +1,28 @@
-if ($('.camera_stream').length) {
+if ($(".camera_stream").length) {
   // References to all the element we will need.
-  var video = document.querySelector('._camera_video'),
-    image = document.querySelector('._camera_snap'),
-    controls = document.querySelector('._camera_controls'),
-    frame = document.querySelector('._camera_frame'),
-    take_photo_btn = document.querySelector('._take_photo'),
-    delete_photo_btn = document.querySelector('._delete_photo'),
-    use_photo_btn = document.querySelector('._use_photo'),
-    error_message = document.querySelector('._camera_message'),
-    camera_title = document.querySelector('._camera_title');
+  var video = document.querySelector("._camera_video"),
+    image = document.querySelector("._camera_snap"),
+    controls = document.querySelector("._camera_controls"),
+    frame = document.querySelector("._camera_frame"),
+    take_photo_btn = document.querySelector("._take_photo"),
+    delete_photo_btn = document.querySelector("._delete_photo"),
+    use_photo_btn = document.querySelector("._use_photo"),
+    error_message = document.querySelector("._camera_message"),
+    camera_title = document.querySelector("._camera_title"),
+    camera_container = document.querySelector(".camera_stream");
   var localStream, savePhotoSrc, saveRelatedTarget, action, group, title;
 
-  video.setAttribute("autoplay", "");
-  video.setAttribute("muted", "");
-  video.setAttribute("playsinline", true);
-  video.setAttribute("controls", true);
-
-  setTimeout(function () {
-    video.removeAttribute("controls");
-  });
-
-  navigator.getMedia = (navigator.getUserMedia ||
+  navigator.getMedia =
+    navigator.getUserMedia ||
     navigator.webkitGetUserMedia ||
     navigator.mozGetUserMedia ||
-    navigator.msGetUserMedia);
+    navigator.msGetUserMedia;
 
   function takePhoto() {
     var snap = takeSnapshot();
 
     // Show image.
-    image.setAttribute('src', snap);
+    image.setAttribute("src", snap);
     image.classList.add("visible");
     frame.classList.remove("visible");
 
@@ -37,7 +30,7 @@ if ($('.camera_stream').length) {
     controls.classList.add("visible");
     take_photo_btn.classList.remove("visible");
     video.classList.remove("visible");
-
+    camera_container.classList.add('camera_stream--snap');
     savePhotoSrc = snap;
 
     // Set the href attribute of the download button to the snap url.
@@ -52,14 +45,13 @@ if ($('.camera_stream').length) {
   function takeSnapshot() {
     // Here we're using a trick that involves a hidden canvas element.
 
-    var hidden_canvas = document.querySelector('canvas'),
-      context = hidden_canvas.getContext('2d');
+    var hidden_canvas = document.querySelector("canvas"),
+      context = hidden_canvas.getContext("2d");
 
     var width = video.videoWidth,
       height = video.videoHeight;
 
     if (width && height) {
-
       // Setup a canvas with the same dimensions as the video.
       hidden_canvas.width = width;
       hidden_canvas.height = height;
@@ -68,7 +60,7 @@ if ($('.camera_stream').length) {
       context.drawImage(video, 0, 0, width, height);
 
       // Turn the canvas image into a dataURL that can be used as a src for our photo.
-      return hidden_canvas.toDataURL('image/png');
+      return hidden_canvas.toDataURL("image/png");
     }
   }
 
@@ -78,6 +70,7 @@ if ($('.camera_stream').length) {
     frame.classList.add("visible");
     video.classList.add("visible");
     take_photo_btn.classList.add("visible");
+    camera_container.classList.remove('camera_stream--snap');
 
     video.play();
   }
@@ -100,7 +93,7 @@ if ($('.camera_stream').length) {
     video.classList.remove("visible");
     error_message.classList.remove("visible");
     frame.classList.remove("visible");
-    image.setAttribute('src', '');
+    image.setAttribute("src", "");
     image.classList.remove("visible");
   }
 
@@ -108,94 +101,109 @@ if ($('.camera_stream').length) {
     // The getUserMedia interface is used for handling camera input.
     // Some browsers need a prefix so here we're covering all the options
 
-
-    if (!navigator.getMedia) {
-      displayErrorMessage("Your browser doesn't have support for the navigator.getUserMedia interface.");
-    }
-    else {
-
-      // Request the camera.
-      navigator.getMedia(
-        {
-          video: true
-        },
-        // Success Callback
-        function (stream) {
+    if (navigator.getUserMedia) {
+      navigator.getUserMedia(
+        { audio: false, video: { facingMode: "user" } },
+        function(stream) {
           localStream = stream;
-          // Create an object URL for the video stream and
-          // set it as src of our HTLM video element.
-          video.src = window.URL.createObjectURL(stream);
-
-          // Play the video element to start the stream.
-          video.play();
-          video.onplay = function () {
-            showVideo();
+          video.srcObject = stream;
+          video.onloadedmetadata = function(e) {
+            video.play();
+            video.onplay = function() {
+              showVideo();
+            };
           };
         },
-        // Error Callback
-        function (err) {
-          displayErrorMessage("There was an error with accessing the camera stream: " + err.name, err);
+        function(err) {
+          displayErrorMessage(
+            "There was an error with accessing the camera stream: " +
+            err.name +
+            ". Try to use another browser or Lykke Wallet App.",
+            err
+          );
+          console.log("The following error occurred: " + err.name);
         }
+      );
+    } else {
+      displayErrorMessage(
+        "Your browser doesn't support the navigator.getUserMedia interface. Try to use another browser or Lykke Wallet App."
       );
     }
   }
 
   function usePhoto() {
     $(saveRelatedTarget)
-      .closest($('.fileupload'))
-      .removeClass('fileupload--fail')
-      .addClass('fileupload--uploaded')
-      .attr('style', 'background-image: url(' + savePhotoSrc + ')');
+      .closest($(".fileupload"))
+      .removeClass("fileupload--fail")
+      .addClass("fileupload--uploaded")
+      .attr("style", "background-image: url(" + savePhotoSrc + ")");
 
-    $(saveRelatedTarget).closest($('.fileupload')).find(".fileupload__field").val(savePhotoSrc);
+    $(saveRelatedTarget)
+      .closest(".fileupload")
+      .children(".fileupload__field")
+      .val(savePhotoSrc)
+      .trigger("change");
+    $(saveRelatedTarget)
+      .closest(".fileupload")
+      .children(".use-file")
+      .val("false");
+    $(saveRelatedTarget)
+      .closest(".fileupload")
+      .children(".use-camera")
+      .val("true");
+    $(saveRelatedTarget)
+      .closest(".fileupload")
+      .children(".file-extension")
+      .val("png");
 
     hideUI();
 
-    $(saveRelatedTarget).closest('.fileupload').children(".fileupload__field").val(savePhotoSrc);
-    $(saveRelatedTarget).closest('.fileupload').children(".use-file").val("false");
-    $(saveRelatedTarget).closest('.fileupload').children(".use-camera").val("true");
-    $(saveRelatedTarget).closest('.fileupload').children(".file-extension").val('png');
-
-    localStream.getVideoTracks()[0].stop();
+    if (localStream) localStream.getVideoTracks()[0].stop();
     saveRelatedTarget = null;
 
-    $('#camera').modal('hide');
+    $("#submit-button").prop("disabled", false);
+    $("#camera").modal("hide");
   }
 
-  take_photo_btn.addEventListener("click", function (e) {
+  take_photo_btn.addEventListener("click", function(e) {
     e.preventDefault();
     takePhoto();
   });
 
-
-  delete_photo_btn.addEventListener("click", function (e) {
+  delete_photo_btn.addEventListener("click", function(e) {
     e.preventDefault();
     deletePhoto();
   });
 
   initCamera();
-/*  saveRelatedTarget = event.relatedTarget;
-  action = $(saveRelatedTarget).data('action');
-  group = $(saveRelatedTarget).data('group');
-  title = $(event.relatedTarget).closest($('.fileupload')).find(".fileupload__title").text();
-  camera_title.textContent = title;*/
 
 
-  $('#camera').on('hide.bs.modal', function () {
-    hideUI();
-
-    localStream.getVideoTracks()[0].stop();
-    saveRelatedTarget = null;
-    camera_title.textContent = ''
+  $("#camera").on("show.bs.modal", function(event) {
+    saveRelatedTarget = event.relatedTarget;
+    action = $(saveRelatedTarget).data("action");
+    group = $(saveRelatedTarget).data("group");
+    title = $(event.relatedTarget)
+      .closest($(".fileupload"))
+      .find(".fileupload__title")
+      .text();
+    camera_title.textContent = title;
   });
 
-/*  use_photo_btn.addEventListener("click", function (e) {
+  $("#camera").on("hide.bs.modal", function() {
+    hideUI();
+
+    if (localStream) localStream.getVideoTracks()[0].stop();
+    saveRelatedTarget = null;
+    camera_title.textContent = "";
+  });
+
+  /*use_photo_btn.addEventListener("click", function(e) {
     e.preventDefault();
     usePhoto();
 
-    if (action === 'front') {
-      setTimeout(function () {
-        $('[data-action="back"][data-group='+group+']').click()
+    if (action === "front") {
+      setTimeout(function() {
+        $('[data-action="back"][data-group=' + group + "]").click();
       }, 700);
     }
   });*/
