@@ -167,7 +167,7 @@
                     <div class="col-sm-4">
                       <div class="form-group">
                         <div class="radio btn-block">
-                          <input type="radio" name="doc" id="radio" class="radio__control" value="Passport" checked="">
+                          <input type="radio" name="doc" id="radio" class="radio__control" value="Passport" checked>
                           <label for="radio" class="form-control control-label radio__label">
                             <i class="icon icon--passport"></i>
                             Passport
@@ -217,8 +217,12 @@
                     <p class="camera_stream__message _camera_message"></p>
                     <a href="#" class="btn btn--circle camera_stream__shoot _take_photo" title="Take Photo"><i class="icon icon--photo"></i></a>
                     <div class="camera_stream__controls _camera_controls">
-                      <a href="#" class="btn btn--flat camera_stream__delete _delete_photo" title="Reshoot">Reshoot</a>
-                      <a href="#" class="btn camera_stream__delete _use_photo" title="Use Photo">Use photo</a>
+                      <a href="#" class="btn btn--flat camera_stream__delete _delete_photo" title="Reshoot">
+                        <span class="camera_stream__delete_text">Retake</span>
+                        <span  class="btn btn--circle"><i class="icon icon--photo"></i></span>
+                      </a>
+
+
                     </div>
                     <canvas></canvas>
                   </div>
@@ -258,11 +262,114 @@
 <!-- endbuild -->
 
 <script>
+  function validateFileType(id) {
+    var file = document.getElementById(id).files[0];
+    if (file.size > 3145728) {
+      file.value = "";
+      alert('The maximum file size is 3MB');
+      return false;
+    }
+
+    var fileName = file.name;
+    var idxDot = fileName.lastIndexOf(".") + 1;
+    var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+
+    if (extFile == "jpg" || extFile == "jpeg" || extFile == "png" || extFile == "pdf") {
+      $("#submit-button").prop("disabled", false);
+    }
+    else {
+      file.value = "";
+      alert("Only jpg, jpeg, png and pdf files are allowed!");
+      return false;
+    }
+  }
+
   $(function () {
     UpdateDocType();
 
+    var showPassport = "@Model.ShowPassport".toLowerCase();
+    var showId = "@Model.ShowId".toLowerCase();
+    var showDriverLicense = "@Model.ShowDriverLicense".toLowerCase();
+
+    $("#submit-button").prop("disabled", true);
+
+    if (showPassport == "false") {
+      $("#radio").attr('disabled', true);
+      console.log(showPassport);
+    }
+
+    if (showId == "false") {
+      $("#radio1").attr('disabled', true);
+      console.log(showId);
+    }
+
+    if (showDriverLicense == "false") {
+      $("#radio2").attr('disabled', true);
+      console.log(showDriverLicense);
+    }
+
     $('input[name=doc]').on('change', function () {
       UpdateDocType();
+    });
+
+    $("#reset-button").click(function (e) {
+      e.preventDefault();
+      document.forms.namedItem("upload-form").reset();
+      $("#reset-button").prop("disabled", true);
+      $("#submit-button").prop("disabled", true);
+
+      location.reload(true);
+    });
+
+    $("#back-button").click(function (e) {
+      e.preventDefault();
+
+      var refererSite = "@Model.RefererSite";
+      console.log(refererSite);
+
+      if (refererSite != "") {
+        location = refererSite;
+      }
+    });
+
+    $("#passport-hidden").change(function (e) {
+      console.log("#passport-hidden");
+
+      $("#radio").prop("disabled", false);
+      $("#radio1").prop("disabled", true);
+      $("#radio2").prop("disabled", true);
+    });
+
+    $("#idfront-hidden").change(function (e) {
+      $("#radio").prop("disabled", true);
+      $("#radio1").prop("disabled", false);
+      $("#radio2").prop("disabled", true);
+    });
+
+    $("#idback-hidden").change(function (e) {
+      $("#radio").prop("disabled", true);
+      $("#radio1").prop("disabled", false);
+      $("#radio2").prop("disabled", true);
+    });
+
+    $("#driverlicensefront-hidden").change(function (e) {
+      $("#radio").prop("disabled", true);
+      $("#radio1").prop("disabled", true);
+      $("#radio2").prop("disabled", false);
+    });
+
+    $("#driverlicenseback-hidden").change(function (e) {
+      $("#radio").prop("disabled", true);
+      $("#radio1").prop("disabled", true);
+      $("#radio2").prop("disabled", false);
+    });
+
+    $("#submit-button").click(function (e) {
+      e.preventDefault();
+
+      $("#reset-button").prop("disabled", true);
+      $("#submit-button").prop("disabled", true);
+      $("#upload-form").submit();
     });
 
     function UpdateDocType() {

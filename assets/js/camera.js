@@ -174,11 +174,11 @@ if ($('.camera_stream').length) {
   });
 
   initCamera();
-  saveRelatedTarget = event.relatedTarget;
+/*  saveRelatedTarget = event.relatedTarget;
   action = $(saveRelatedTarget).data('action');
   group = $(saveRelatedTarget).data('group');
   title = $(event.relatedTarget).closest($('.fileupload')).find(".fileupload__title").text();
-  camera_title.textContent = title;
+  camera_title.textContent = title;*/
 
 
   $('#camera').on('hide.bs.modal', function () {
