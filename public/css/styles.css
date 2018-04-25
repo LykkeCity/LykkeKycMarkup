@@ -1850,7 +1850,7 @@ label.error { display: none !important; }
 
 .relative { position: relative; }
 
-.camera_stream { position: absolute; text-align: center; top: 5px; right: 5px; left: 5px; bottom: 90px; }
+.camera_stream { position: absolute; text-align: center; top: 5px; right: 5px; left: 5px; bottom: 90px; perspective: 1000px; }
 
 .camera_stream canvas { display: none; }
 
@@ -1868,11 +1868,21 @@ label.error { display: none !important; }
 
 .camera_stream__frame.visible { display: block; }
 
+.camera_stream__wrapper { position: absolute; width: 100%; height: 100%; top: 0; left: 0; perspective: 1000px; transition: 0.6s; transform-style: preserve-3d; z-index: 20; }
+
+.camera_stream--flipped .camera_stream__wrapper { transform: rotateY(-180deg); }
+
+.camera_stream__front, .camera_stream__back { position: absolute; width: 100%; height: 100%; top: 0; left: 0; backface-visibility: hidden; }
+
+.camera_stream__front { z-index: 2; transform: rotateY(0deg); }
+
+.camera_stream__back { transform: rotateY(180deg); }
+
 .camera_stream__video { max-width: 100%; margin-left: auto; margin-right: auto; display: none; position: absolute; left: 0; right: 0; top: 0; border-radius: 4px; overflow: hidden; }
 
 .camera_stream__video.visible { display: block; }
 
-.camera_stream__controls, .camera_stream__shoot { left: 0; right: 0; margin: 0 auto; position: absolute; text-align: center; display: none; bottom: -70px; bottom: -4.375rem; }
+.camera_stream__controls, .camera_stream__shoot { left: 0; right: 0; margin: 0 auto; position: absolute; text-align: center; display: none; backface-visibility: visible; transform: translate3d(0, 0, 0); bottom: -70px; bottom: -4.375rem; }
 
 .camera_stream__controls.visible, .camera_stream__shoot.visible { display: block; }
 
@@ -1880,11 +1890,13 @@ label.error { display: none !important; }
 
 .camera_stream__controls .btn--flat { margin-right: 10px; margin-right: 0.625rem; }
 
-.camera_stream__back_btn { position: absolute; z-index: 10; right: 0px; right: 0rem; bottom: -70px; bottom: -4.375rem; padding-left: 15px; padding-left: 0.9375rem; padding-right: 15px; padding-right: 0.9375rem; }
+.camera_stream__back_btn { position: absolute; z-index: 10; backface-visibility: visible; transform: translate3d(0, 0, 0); display: none; right: 0px; right: 0rem; bottom: -70px; bottom: -4.375rem; padding-left: 15px; padding-left: 0.9375rem; padding-right: 15px; padding-right: 0.9375rem; }
+
+.camera_stream__back_btn.visible { display: block; }
 
 .camera_stream__back_btn .icon { font-size: 30px; font-size: 1.875rem; margin-top: -5px; margin-top: -0.3125rem; margin-bottom: -5px; margin-bottom: -0.3125rem; }
 
-.camera_stream__snap { position: absolute; max-width: 100%; max-height: 100%; top: 0; left: 0; width: 100%; display: none; border-radius: 4px; }
+.camera_stream__snap { position: absolute; max-width: 100%; max-height: 100%; top: 0; left: 0; width: 100%; display: none; border-radius: 4px; z-index: 20; }
 
 .camera_stream__snap.visible { display: block; }
 

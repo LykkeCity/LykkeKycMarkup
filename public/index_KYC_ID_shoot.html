@@ -208,10 +208,16 @@
 
                 <div class="camera_item">
                   <div class="camera_stream">
-                    <video class="camera_stream__video _camera_video" playsinline></video>
                     <div class="camera_stream__frame _camera_frame"></div>
-                    <img class="camera_stream__snap camera_stream__snap--front _camera_snap">
-                    <img class="camera_stream__snap camera_stream__snap--back _camera_snap_back">
+                    <div class="camera_stream__wrapper">
+                      <div class="camera_stream__front">
+                        <img class="camera_stream__snap camera_stream__snap--front _camera_snap">
+                      </div>
+                      <div class="camera_stream__back">
+                        <img class="camera_stream__snap camera_stream__snap--back _camera_snap_back">
+                      </div>
+                    </div>
+                    <video class="camera_stream__video _camera_video" playsinline></video>
                     <p class="camera_stream__title _camera_title"></p>
                     <p class="camera_stream__message _camera_message"></p>
                     <a href="#" class="btn btn--circle camera_stream__shoot _take_photo" title="Take Photo"><i class="icon icon--photo"></i></a>
@@ -227,7 +233,6 @@
                     </button>
                     <canvas></canvas>
                   </div>
-
                 </div>
 
                 <div class="steps_item__button">
@@ -396,22 +401,6 @@
       }
     }
   });
-
-  var initialText = $('._rotate_side').text();
-
-  $('._rotate_side').on('click', function (e) {
-    e.preventDefault();
-
-    var textContainer = $(this).find('._text'),
-      newText = $(this).data('toggle-text');
-
-    if (textContainer.text() === newText) {
-      textContainer.text(initialText)
-    }
-    else {
-      textContainer.text(newText)
-    }
-  })
 </script>
 
 </body>

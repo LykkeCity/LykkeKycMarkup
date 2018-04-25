@@ -2,6 +2,7 @@ if ($(".camera_stream").length) {
   // References to all the element we will need.
   var video = document.querySelector("._camera_video"),
     image = document.querySelector("._camera_snap"),
+    imageBack = document.querySelector("._camera_snap_back"),
     controls = document.querySelector("._camera_controls"),
     frame = document.querySelector("._camera_frame"),
     take_photo_btn = document.querySelector("._take_photo"),
@@ -9,8 +10,17 @@ if ($(".camera_stream").length) {
     use_photo_btn = document.querySelector("._use_photo"),
     error_message = document.querySelector("._camera_message"),
     camera_title = document.querySelector("._camera_title"),
+    camera_rotate_btn = document.querySelector("._rotate_side"),
     camera_container = document.querySelector(".camera_stream");
-  var localStream, savePhotoSrc, saveRelatedTarget, action, group, title;
+  var localStream, savePhotoSrc, saveBackPhotoSrc, saveRelatedTarget, action, group, title;
+
+  var side = 'front',
+    isFrontSnapExist = false,
+    isBackSnapExist = false;
+
+  if (camera_rotate_btn) {
+    initialText = camera_rotate_btn.innerText
+  }
 
   navigator.getMedia =
     navigator.getUserMedia ||
@@ -22,24 +32,43 @@ if ($(".camera_stream").length) {
     var snap = takeSnapshot();
 
     // Show image.
-    image.setAttribute("src", snap);
-    image.classList.add("visible");
     frame.classList.remove("visible");
 
     // Enable delete and save buttons
     controls.classList.add("visible");
     take_photo_btn.classList.remove("visible");
-    video.classList.remove("visible");
     camera_container.classList.add('camera_stream--snap');
-    savePhotoSrc = snap;
+    if (camera_rotate_btn) camera_rotate_btn.classList.add("visible");
 
     // Set the href attribute of the download button to the snap url.
     // Pause video playback of stream.
-    video.pause();
+
+    if (side === 'front') {
+      isFrontSnapExist = true;
+      image.setAttribute("src", snap);
+      image.classList.add("visible");
+      savePhotoSrc = snap;
+    } else {
+      imageBack.setAttribute("src", snap);
+      imageBack.classList.add("visible");
+      isBackSnapExist = true;
+      saveBackPhotoSrc = snap;
+    }
+
+    console.log('isBackSnapExist: ', isBackSnapExist, 'isFrontSnapExist: ', isFrontSnapExist)
+
+    if (isFrontSnapExist && isBackSnapExist) {
+      video.classList.remove("visible");
+      video.pause();
+    }
   }
 
   function showVideo() {
-    deletePhoto();
+    controls.classList.remove("visible");
+    frame.classList.add("visible");
+    take_photo_btn.classList.add("visible");
+    video.classList.add("visible");
+    error_message.classList.remove("visible");
   }
 
   function takeSnapshot() {
@@ -65,14 +94,37 @@ if ($(".camera_stream").length) {
   }
 
   function deletePhoto() {
-    hideUI();
-
-    frame.classList.add("visible");
-    video.classList.add("visible");
-    take_photo_btn.classList.add("visible");
-    camera_container.classList.remove('camera_stream--snap');
-
     video.play();
+    toggleUIOnDelete()
+
+    if (side === 'front') {
+      image.setAttribute("src", "");
+      image.classList.remove("visible");
+      isFrontSnapExist = false
+    } else {
+      imageBack.setAttribute("src", "");
+      imageBack.classList.remove("visible");
+      isBackSnapExist = false
+      if (camera_rotate_btn) camera_rotate_btn.classList.add("visible");
+    }
+
+    if (!isFrontSnapExist && !isBackSnapExist) {
+      camera_container.classList.remove('camera_stream--snap');
+    }
+  }
+
+  function toggleUIOnDelete() {
+    if (isBackSnapExist && isFrontSnapExist) {
+      take_photo_btn.classList.add("visible");
+      controls.classList.remove("visible");
+      if (camera_rotate_btn) camera_rotate_btn.classList.add("visible");
+    }
+    else {
+      controls.classList.remove("visible");
+      frame.classList.add("visible");
+      take_photo_btn.classList.add("visible");
+      if (camera_rotate_btn) camera_rotate_btn.classList.remove("visible");
+    }
   }
 
   function displayErrorMessage(error_msg, error) {
@@ -177,25 +229,51 @@ if ($(".camera_stream").length) {
 
   initCamera();
 
+  if (camera_rotate_btn) {
+    camera_rotate_btn.addEventListener('click', function (e) {
+      e.preventDefault();
 
-  $("#camera").on("show.bs.modal", function(event) {
-    saveRelatedTarget = event.relatedTarget;
-    action = $(saveRelatedTarget).data("action");
-    group = $(saveRelatedTarget).data("group");
-    title = $(event.relatedTarget)
-      .closest($(".fileupload"))
-      .find(".fileupload__title")
-      .text();
-    camera_title.textContent = title;
-  });
+      var textContainer = $(this).find('._text'),
+        newText = $(this).data('toggle-text'),
+        cameraContainer = $(this).parents('.camera_stream');
 
-  $("#camera").on("hide.bs.modal", function() {
-    hideUI();
+      controls.classList.add("visible");
+      frame.classList.remove("visible");
+      take_photo_btn.classList.remove("visible");
 
-    if (localStream) localStream.getVideoTracks()[0].stop();
-    saveRelatedTarget = null;
-    camera_title.textContent = "";
-  });
+      if (side === 'front') {
+        side = 'back',
+          textContainer.text(newText)
+        cameraContainer.addClass('camera_stream--flipped');
+
+        if (isFrontSnapExist && !isBackSnapExist) {
+          controls.classList.remove("visible");
+          frame.classList.add("visible");
+          take_photo_btn.classList.add("visible");
+        }
+      }
+
+      else {
+        side = 'front'
+        textContainer.text(initialText)
+        cameraContainer.removeClass('camera_stream--flipped');
+
+        if (!isFrontSnapExist && isBackSnapExist) {
+          controls.classList.remove("visible");
+          frame.classList.add("visible");
+          take_photo_btn.classList.add("visible");
+        }
+      }
+
+      if (!isFrontSnapExist && !isBackSnapExist && side === 'front') {
+        controls.classList.remove("visible");
+        frame.classList.add("visible");
+        take_photo_btn.classList.add("visible");
+        camera_rotate_btn.classList.remove("visible");
+      }
+    });
+  }
+
 
   /*use_photo_btn.addEventListener("click", function(e) {
     e.preventDefault();
