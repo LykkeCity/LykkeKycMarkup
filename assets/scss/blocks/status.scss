@@ -5,22 +5,6 @@
   margin-right: auto;
   padding: 10vH 0;
 
-  .status_icon {
-    border-radius: 100px;
-    text-align: center;
-    color: $white;
-    background-color: $primary;
-
-    @include rem(margin-bottom, 30px);
-    @include rem(width, 90px);
-    @include rem(height, 90px);
-    @include rem(line-height, 86px);
-
-    img {
-      @include rem(width, 60px);
-    }
-  }
-
   &__title {
     font-family: $ff-alt;
     font-weight: bold;
@@ -49,6 +33,25 @@
     }
   }
 
+  &__decline_list {
+    line-height: 1.67;
+    color: $text;
+
+    @include rem(margin-top, 25px);
+    @include rem(font-size, 18px);
+
+    li {
+      @include rem(margin-bottom, 15px);
+    }
+
+    .icon {
+      position: relative;
+      top: -2px;
+
+      @include rem(font-size, 30px);
+    }
+  }
+
   @media all and (max-width: $screen-landscape) {
     padding: 20px 0;
   }
@@ -61,5 +64,29 @@
 
   a {
     font-weight: $fw-semi;
+  }
+}
+
+.status_icon {
+  border-radius: 100px;
+  text-align: center;
+  color: $white;
+  background-color: $primary;
+
+  @include rem(margin-bottom, 30px);
+  @include rem(width, 90px);
+  @include rem(height, 90px);
+  @include rem(line-height, 86px);
+
+  img {
+    @include rem(width, 60px);
+  }
+
+  &--green {
+    background-color: $green;
+  }
+
+  &--red {
+    background-color: $red;
   }
 }
