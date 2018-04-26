@@ -1791,15 +1791,21 @@ label.error { display: none !important; }
 
 .status_icon--warning:before { content: ""; }
 
-.modal-open { overflow: hidden; }
+.message_modal { padding: 0 15px !important; }
 
-.modal { overflow: hidden; top: 0; right: 0; bottom: 0; left: 0; z-index: 1050; -webkit-overflow-scrolling: touch; outline: 0; }
+.message_modal .modal__dialog { width: 470px; max-width: 100%; pointer-events: all; }
 
-.modal-open .modal { overflow-x: hidden; overflow-y: auto; }
+.message_modal .close { z-index: 20; }
 
-.modal-content { position: relative; -webkit-background-clip: padding-box; background-clip: padding-box; outline: 0; }
+.message_modal .block_status__text { font-size: 18px; font-size: 1.125rem; margin-bottom: 40px; margin-bottom: 2.5rem; }
 
-.modal-scrollbar-measure { position: absolute; top: -9999px; width: 50px; height: 50px; overflow: scroll; }
+.message_modal .block_status__title { margin-bottom: 15px; margin-bottom: 0.9375rem; }
+
+.message_modal .block_status__button .btn--flat { margin-bottom: -15px; margin-bottom: -0.9375rem; margin-top: 10px; margin-top: 0.625rem; }
+
+.message_modal .modal__body { padding: 40px; padding: 2.5rem; }
+
+.message_modal .t-simulate { pointer-events: none; table-layout: fixed; }
 
 .form--kyc .control-label { padding-top: 5px; padding-top: 0.3125rem; }
 
@@ -1971,6 +1977,8 @@ label.error { display: none !important; }
 .steps_list { counter-reset: section; list-style-type: none; width: 755px; max-width: 100%; margin-left: auto; margin-right: auto; padding: 35px 0; padding: 2.1875rem 0; }
 
 .steps_item { position: relative; padding: 3px 85px 80px 80px; padding: 0.1875rem 5.3125rem 5rem 5rem; }
+
+.steps_item__content a { font-weight: 600; }
 
 .steps_item__title { font-weight: bold; line-height: 1; color: #111111; font-family: "Akrobat", "Segoe UI", Roboto, "Droid Sans", "Helvetica Neue", Arial, sans-serif; font-size: 30px; font-size: 1.875rem; margin-bottom: 20px; margin-bottom: 1.25rem; }
 
