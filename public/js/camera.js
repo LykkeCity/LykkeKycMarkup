@@ -38,7 +38,7 @@ if ($(".camera_stream").length) {
     controls.classList.add("visible");
     take_photo_btn.classList.remove("visible");
     camera_container.classList.add('camera_stream--snap');
-    if (camera_rotate_btn) camera_rotate_btn.classList.add("visible");
+    camera_rotate_btn.classList.add("visible");
 
     // Set the href attribute of the download button to the snap url.
     // Pause video playback of stream.
@@ -105,7 +105,7 @@ if ($(".camera_stream").length) {
       imageBack.setAttribute("src", "");
       imageBack.classList.remove("visible");
       isBackSnapExist = false
-      if (camera_rotate_btn) camera_rotate_btn.classList.add("visible");
+      camera_rotate_btn.classList.add("visible");
     }
 
     if (!isFrontSnapExist && !isBackSnapExist) {
@@ -115,15 +115,15 @@ if ($(".camera_stream").length) {
 
   function toggleUIOnDelete() {
     if (isBackSnapExist && isFrontSnapExist) {
+      camera_rotate_btn.classList.add("visible");
       take_photo_btn.classList.add("visible");
       controls.classList.remove("visible");
-      if (camera_rotate_btn) camera_rotate_btn.classList.add("visible");
     }
     else {
       controls.classList.remove("visible");
       frame.classList.add("visible");
       take_photo_btn.classList.add("visible");
-      if (camera_rotate_btn) camera_rotate_btn.classList.remove("visible");
+      camera_rotate_btn.classList.remove("visible");
     }
   }
 

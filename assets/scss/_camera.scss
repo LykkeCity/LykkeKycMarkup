@@ -1,11 +1,12 @@
 .camera_stream {
-  position: absolute;
+  position: relative;
   text-align: center;
-  top: 5px;
-  right: 5px;
-  left: 5px;
-  bottom: 90px;
   perspective: 1000px;
+  padding-bottom: 74.8%;
+  height: 0;
+  border-radius: 4px;
+  background-color: #f7f8f9;
+  border: solid 1px #ebedef;
 
   canvas {
     display: none;
@@ -17,11 +18,16 @@
     padding-bottom: 0;
 
     .btn--circle {
+      padding-left: 5px;
+      padding-right: 5px;
+
       @include rem(width, 50px);
       @include rem(height, 50px);
       @include rem(margin-left, 10px);
 
       .icon {
+        top: 1px;
+
         @include rem(margin, -5px);
       }
     }
@@ -42,6 +48,12 @@
     font-size: 20px;
     z-index: 9999999;
     pointer-events: none;
+  }
+
+  &__message {
+    margin: 0;
+    color: #8c94a0;
+    padding: 20px;
   }
 
   &__frame {
@@ -89,6 +101,8 @@
     top: 0;
     left: 0;
     backface-visibility: hidden;
+    overflow: hidden;
+    border-radius: 3px;
   }
 
   &__front {
@@ -105,7 +119,6 @@
     margin-left: auto;
     margin-right: auto;
     display: none;
-    position: absolute;
     left: 0;
     right: 0;
     top: 0;
@@ -187,11 +200,17 @@
     z-index: 2;
 
     @include rem(width, 50px);
+    @include rem(padding-left, 5px);
+    @include rem(padding-right, 5px);
     @include rem(height, 50px);
 
     .icon {
-      @include rem(margin, -5px);
+      top: 1px;
     }
+  }
+
+  @media all and (max-width: $screen-landscape) {
+    padding-bottom: 74.4%;
   }
 }
 
@@ -231,7 +250,7 @@
   position: relative;
 
   @include rem(padding, 5px);
-  @include rem(height, 535px);
+  @include rem(padding-bottom, 90px);
   @include rem(margin-bottom, 40px);
   @include rem(margin-top, 40px);
 }

@@ -224,10 +224,10 @@
                     <div class="camera_stream__controls _camera_controls">
                       <button type="button" class="btn btn--flat camera_stream__delete _delete_photo" title="Reshoot">
                         <span class="camera_stream__delete_text">Retake</span>
-                        <span  class="btn btn--circle"><i class="icon icon--photo"></i></span>
+                        <span class="btn btn--circle"><i class="icon icon--photo"></i></span>
                       </button>
                     </div>
-                    <button type="button" class="btn btn--flat camera_stream__back_btn _rotate_side" data-toggle-text="Front side">
+                    <button type="button" class="btn btn--flat camera_stream__back_btn _rotate_side" data-toggle-text="Front side" v-show="documents.TypeId != 'Passport'">
                       <i class="icon icon--exchange"></i>
                       <span class="_text">Back side</span>
                     </button>
@@ -262,143 +262,305 @@
 
 <script src="/js/vendor/jquery.min.js"></script>
 <script src="/js/vendor/bootstrap.min.js"></script>
+<script src="/js/vendor/vue.min.js"></script>
 <!-- build:js js/functions.js -->
 <script src="/js/functions.js"></script>
 <script src="/js/camera.js"></script>
 <!-- endbuild -->
 
 <script>
-  function validateFileType(id) {
-    var file = document.getElementById(id).files[0];
-    if (file.size > 3145728) {
-      file.value = "";
-      alert('The maximum file size is 3MB');
-      return false;
-    }
+  var _this = "";
 
-    var fileName = file.name;
-    var idxDot = fileName.lastIndexOf(".") + 1;
-    var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+  var app = new Vue({
+    el: "#webkycflow-vue-app",
+    data: {
+      documents: [],
+      kycStatus: "",
 
-    if (extFile == "jpg" || extFile == "jpeg" || extFile == "png" || extFile == "pdf") {
-      $("#submit-button").prop("disabled", false);
-    }
-    else {
-      file.value = "";
-      alert("Only jpg, jpeg, png and pdf files are allowed!");
-      return false;
-    }
-  }
+      // Document ID
+      documentId: {
+        display: false,
+        useCamera: true
+      },
 
-  $(function () {
-    UpdateDocType();
+      displayAddress: false,
 
-    var showPassport = "@Model.ShowPassport".toLowerCase();
-    var showId = "@Model.ShowId".toLowerCase();
-    var showDriverLicense = "@Model.ShowDriverLicense".toLowerCase();
+      // Document Address
+      documentAddress: {
+        display: false,
+        useCamera: false,
+        useFile: false,
+        hasFile: false,
 
-    $("#submit-button").prop("disabled", true);
+        file: {
+          name: "",
+          extension: "",
+          size: "",
 
-    if (showPassport == "false") {
-      $("#radio").attr('disabled', true);
-      console.log(showPassport);
-    }
+          reset: function () {
+            this.name = "";
+            this.extension = "";
+            this.size = "";
+          }
+        },
 
-    if (showId == "false") {
-      $("#radio1").attr('disabled', true);
-      console.log(showId);
-    }
+        toggleCamera: function () {
+          this.useCamera = true;
+          this.useFile = false;
+          this.hasFile = false;
+          this.file.reset();
 
-    if (showDriverLicense == "false") {
-      $("#radio2").attr('disabled', true);
-      console.log(showDriverLicense);
-    }
+          $(".x_use_file").val("false");
+        },
 
-    $('input[name=doc]').on('change', function () {
-      UpdateDocType();
-    });
+        toggleFile: function () {
+          this.useCamera = false;
+          this.useFile = true;
 
-    $("#reset-button").click(function (e) {
-      e.preventDefault();
-      document.forms.namedItem("upload-form").reset();
-      $("#reset-button").prop("disabled", true);
-      $("#submit-button").prop("disabled", true);
+          document.getElementsByClassName("x_file_upload")[0].click();
+        },
+      },
 
-      location.reload(true);
-    });
-
-    $("#back-button").click(function (e) {
-      e.preventDefault();
-
-      var refererSite = "@Model.RefererSite";
-      console.log(refererSite);
-
-      if (refererSite != "") {
-        location = refererSite;
+      // Document Selfie
+      documentSelfie: {
+        display: false,
+        useCamera: true
       }
-    });
+    },
+    methods: {
+      convertBytes: function (x) {
+        let units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        let l = 0, n = parseInt(x, 10) || 0;
 
-    $("#passport-hidden").change(function (e) {
-      console.log("#passport-hidden");
+        while (n >= 1024 && ++l)
+          n = n / 1024;
 
-      $("#radio").prop("disabled", false);
-      $("#radio1").prop("disabled", true);
-      $("#radio2").prop("disabled", true);
-    });
+        return (n.toFixed(n >= 10 || l < 1 ? 0 : 1) + ' ' + units[l]);
+      },
+      getKycStatus: function () {
+        let result = "";
 
-    $("#idfront-hidden").change(function (e) {
-      $("#radio").prop("disabled", true);
-      $("#radio1").prop("disabled", false);
-      $("#radio2").prop("disabled", true);
-    });
+        $.ajax({
+          url: '/api/documents/kycstatus', method: 'GET', type: 'json', async: false,
+          success: function (data) {
+            result = data;
+          }
+        });
 
-    $("#idback-hidden").change(function (e) {
-      $("#radio").prop("disabled", true);
-      $("#radio1").prop("disabled", false);
-      $("#radio2").prop("disabled", true);
-    });
+        return result;
+      },
+      uploadDocuments: function (docModel) {
+        var result = false;
 
-    $("#driverlicensefront-hidden").change(function (e) {
-      $("#radio").prop("disabled", true);
-      $("#radio1").prop("disabled", true);
-      $("#radio2").prop("disabled", false);
-    });
+        $.ajax({
+          url: '/api/documents/upload', method: 'POST', data: docModel, type: 'json', async: false,
+          success: function () {
+            result = true;
+          }
+        });
 
-    $("#driverlicenseback-hidden").change(function (e) {
-      $("#radio").prop("disabled", true);
-      $("#radio1").prop("disabled", true);
-      $("#radio2").prop("disabled", false);
-    });
+        return result;
+      },
+      onSubmitId: function () {
+        $("#document_submit_id").prop("disabled", true);
+        let frontSideResult = false, backSideResult = false;
 
-    $("#submit-button").click(function (e) {
-      e.preventDefault();
+        let docFrontSide = {};
+        docFrontSide.DocumentName = _this.documents.TypeId;
+        docFrontSide.DocumentType = "";
+        docFrontSide.FileExtension = "png";
+        docFrontSide.Data = $(".x_photo_front_side").val();
 
-      $("#reset-button").prop("disabled", true);
-      $("#submit-button").prop("disabled", true);
-      $("#upload-form").submit();
-    });
+        let docBackSide = {};
+        docBackSide.DocumentName = _this.documents.TypeId;
+        docBackSide.DocumentType = "BackSide";
+        docBackSide.FileExtension = "png";
+        docBackSide.Data = $(".x_photo_back_side").val();
 
-    function UpdateDocType() {
-      var type = $('input[name=doc]:checked').val();
-      console.log(type);
+        // frontSideResult = true;
+        // backSideResult = true;
 
-      if (type == "Passport") {
-        $("#passport-row").show();
-        $("#id-row").hide();
-        $("#driverlicense-row").hide();
+        frontSideResult = _this.uploadDocuments(docFrontSide);
+
+        if (_this.documents.TypeId != "Passport") {
+          backSideResult = _this.uploadDocuments(docBackSide);
+        }
+        else {
+          backSideResult = true;
+        }
+
+        if (frontSideResult && backSideResult) {
+          _this.documentId.display = false;
+
+          if (_this.documents.RequireAddress) {
+            _this.documentAddress.display = true;
+          }
+          else if (_this.documents.RequireSelfie) {
+            _this.documentSelfie.display = true;
+          }
+          else {
+
+          }
+        }
+        else {
+          $("#document_submit_id").prop("disabled", false);
+        }
+
+        $(".x_photo_front_side").val("");
+        $(".x_photo_back_side").val("");
+        $(".x_use_file").val("");
+        _this.documents.TypeId = "";
+      },
+      onSubmitAddress: function () {
+        _this.documents.TypeId = "";
+        $("#document_submit_address").prop("disabled", true);
+        let frontSideResult = false;
+
+        let docFrontSide = {};
+        docFrontSide.DocumentName = "ProofOfAddress";
+        docFrontSide.DocumentType = "";
+
+        // frontSideResult = true;
+
+        if (_this.documentAddress.hasFile) {
+          docFrontSide.FileExtension = _this.documentAddress.file.extension;
+        }
+        else {
+          docFrontSide.FileExtension = "png";
+        }
+
+        docFrontSide.Data = $(".x_photo_front_side").val();
+        frontSideResult = _this.uploadDocuments(docFrontSide);
+
+        if (frontSideResult) {
+          _this.documentAddress.display = false;
+
+          if (_this.documents.RequireSelfie) {
+            _this.documentSelfie.display = true;
+          }
+        }
+        else {
+          $("#document_submit_address").prop("disabled", false);
+        }
+
+      },
+      onSubmitSelfie: function () {
+        _this.documents.TypeId = "";
+        $("#document_submit_selfie").prop("disabled", true);
+        let frontSideResult = false, submitResult = false;
+
+        let docFrontSide = {};
+        docFrontSide.DocumentName = "Selfie";
+        docFrontSide.DocumentType = "";
+        docFrontSide.FileExtension = "png";
+        docFrontSide.Data = $(".x_photo_front_side").val();
+
+        frontSideResult = _this.uploadDocuments(docFrontSide);
+        // frontSideResult = true;
+
+        if (frontSideResult) {
+          $("#document_submit_selfie").prop("disabled", true);
+          _this.documentSelfie.display = false;
+
+          $.ajax({
+            url: '/api/documents/submit', method: 'POST', type: 'json', async: true,
+            success: function () {
+              _this.kycStatus = _this.getKycStatus();
+            },
+            error: function () {
+              _this.documentSelfie.display = true;
+              $("#document_submit_selfie").prop("disabled", false);
+
+              _this.kycStatus = _this.getKycStatus();
+            }
+          });
+        }
+        else {
+          $("#document_submit_selfie").prop("disabled", false);
+        }
+      },
+      getDocuments: function () {
+        let result = "";
+
+        $.ajax({
+          url: '/api/documents/list', method: 'GET', type: 'json', async: false,
+          success: function (data) {
+            result = data;
+          }
+        });
+
+        return result;
+      },
+      validateFile: function (event, fileInfo) {
+        var file = event.target.files[0];
+
+        if (file.size > 3145728) {
+          file.value = "";
+          fileInfo.reset();
+
+          $(".document_submit").prop("disabled", true);
+
+          $(".x_use_file").val("false");
+          this.documentAddress.hasFile = false;
+
+          alert('The maximum file size is 3MB');
+          return false;
+        }
+
+        var fileName = file.name;
+        var idxDot = fileName.lastIndexOf(".") + 1;
+        var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+
+        if (extFile == "jpg" || extFile == "jpeg" || extFile == "png" || extFile == "pdf") {
+          this.documentAddress.hasFile = true;
+          $(".document_submit").prop("disabled", false);
+
+          fileInfo.name = file.name;
+          fileInfo.extension = extFile;
+          fileInfo.size = this.convertBytes(file.size);
+
+          var reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = function () {
+            $(".x_photo_front_side").val(reader.result);
+          };
+
+          $(".x_use_file").val("true");
+        }
+        else {
+          file.value = "";
+          fileInfo.reset();
+
+          $(".document_submit").prop("disabled", true);
+
+          $(".x_use_file").val("false");
+          this.documentAddress.hasFile = false;
+
+          alert("Only jpg, jpeg, png and pdf files are allowed!");
+          return false;
+        }
       }
+    },
+    mounted: function () {
+      _this = this;
 
-      if (type == "ID") {
-        $("#passport-row").hide();
-        $("#id-row").show();
-        $("#driverlicense-row").hide();
-      }
+      _this.kycStatus = _this.getKycStatus();
+      _this.documents = _this.getDocuments();
 
-      if (type == "DriverLicense") {
-        $("#passport-row").hide();
-        $("#id-row").hide();
-        $("#driverlicense-row").show();
+      // if (_this.documents == "") location = "/404";
+
+      if (new Boolean(_this.documents.RequireId) == true) {
+        _this.documentId.display = true;
       }
+      else if (new Boolean(_this.documents.RequireAddress) == true) {
+        _this.documentAddress.display = true;
+      }
+      else if (new Boolean(_this.documents.RequireSelfie) == true) {
+        _this.documentSelfie.display = true;
+      }
+    },
+    updated: function () {
+      initCameraModule();
     }
   });
 </script>

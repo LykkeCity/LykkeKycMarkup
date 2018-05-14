@@ -5,8 +5,13 @@
   max-width: 100%;
   margin-left: auto;
   margin-right: auto;
+  position: relative;
 
   @include rem(padding, 35px 0);
+
+  @media all and (max-width: $screen-mobile) {
+    padding-top: 60px;
+  }
 }
 
 .steps_item {
@@ -104,7 +109,6 @@
     @include rem(left, 20px);
   }
 
-
   &:before {
     counter-increment: section;
     content: counters(section, "");
@@ -138,6 +142,94 @@
   &:last-child {
     &:after {
       display: none;
+    }
+  }
+
+  @media all and (max-width: $screen-tablet) {
+    padding-right: 0;
+    padding-left: 60px;
+    padding-bottom: 60px;
+  }
+
+  @media all and (max-width: $screen-mobile) {
+    position: static;
+    padding: 0;
+
+    &:before {
+      left: 0;
+      top: 0;
+      box-shadow: 0 0 0 8px $white;
+    }
+
+    &:after {
+      top: 15px;
+      width: 40px;
+      border-top: 1px solid #ebedef;
+      left: 25px;
+      height: auto;
+    }
+
+    &:nth-child(2) {
+      &:before, .steps_item__edit {
+        left: 60px;
+      }
+      &:after {
+        left: 85px;
+      }
+    }
+    &:nth-child(3) {
+      &:before, .steps_item__edit {
+        left: 120px;
+      }
+      &:after {
+        left: 145px;
+      }
+    }
+    &:nth-child(4) {
+      &:before, .steps_item__edit {
+        left: 180px;
+      }
+      &:after {
+        left: 205px;
+      }
+    }
+    &:nth-child(5) {
+      &:before, .steps_item__edit {
+        left: 240px;
+      }
+      &:after {
+        left: 265px;
+      }
+    }
+
+    .form-group {
+      margin-bottom: 10px;
+    }
+
+    &__title {
+      font-size: 27px;
+      margin-bottom: 20px;
+      line-height: 1.3;
+      display: none;
+    }
+
+    &__content {
+      font-size: 16px;
+      display: none;
+
+      p, ul, ol, .asset_link__title {
+        font-size: inherit;
+      }
+    }
+
+    &--active {
+      padding-bottom: 20px;
+      padding-top: 3px;
+
+      .steps_item__title,
+      .steps_item__content {
+        display: block;
+      }
     }
   }
 }
@@ -332,5 +424,9 @@
       padding-left: 5px;
       padding-right: 5px;
     }
+  }
+
+  @media all and (max-width: $screen-mobile) {
+    margin-top: 20px;
   }
 }

@@ -44,6 +44,21 @@
       @include rem(font-size, 30px);
       @include rem(margin-bottom, 5px);
     }
+
+    @media all and (max-width: $screen-mobile) {
+      padding: 12px;
+      height: 48px;
+      text-align: left;
+      font-size: 15px;
+      line-height: 1.67;
+
+      .icon {
+        margin-bottom: 0;
+        font-size: 24px;
+        margin-right: 6px;
+        display: inline-block;
+      }
+    }
   }
 }
 
