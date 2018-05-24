@@ -1869,9 +1869,9 @@ label.error { display: none !important; }
 
 .camera_stream__delete .btn--circle { padding-left: 5px; padding-right: 5px; width: 50px; width: 3.125rem; height: 50px; height: 3.125rem; margin-left: 10px; margin-left: 0.625rem; }
 
-.camera_stream__delete .btn--circle .icon { top: 1px; margin: -5px; margin: -0.3125rem; }
+.camera_stream__delete .btn--circle .icon { top: 0; margin: -5px; margin: -0.3125rem; }
 
-.camera_stream__delete_text { margin-left: -60px; margin-left: -3.75rem; }
+.camera_stream__delete_text { position: absolute; top: 50%; right: 90px; right: 5.625rem; margin-top: -12px; margin-top: -0.75rem; }
 
 .camera_stream__title { position: absolute; top: 20px; left: 0; right: 0; text-align: center; color: #fff; font-weight: 600; font-size: 20px; z-index: 9999999; pointer-events: none; }
 
@@ -1881,17 +1881,17 @@ label.error { display: none !important; }
 
 .camera_stream__frame.visible { display: block; }
 
-.camera_stream__wrapper { position: absolute; width: 100%; height: 100%; top: 0; left: 0; perspective: 1000px; transition: 0.6s; transform-style: preserve-3d; z-index: 20; }
+.camera_stream__wrapper { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 20; -webkit-transform-style: preserve-3d; -moz-transform-style: preserve-3d; -ms-transform-style: preserve-3d; -o-transform-style: preserve-3d; transform-style: preserve-3d; -webkit-perspective: 1000px; -moz-perspective: 1000px; -ms-perspective: 1000px; -o-perspective: 1000px; perspective: 1000px; -webkit-transition: 0.6s; -moz-transition: 0.6s; -o-transition: 0.6s; transition: 0.6s; -webkit-backface-visibility: hidden; -moz-backface-visibility: hidden; -ms-backface-visibility: hidden; -o-backface-visibility: hidden; backface-visibility: hidden; }
 
-.camera_stream--flipped .camera_stream__wrapper { transform: rotateY(-180deg); }
+.camera_stream--flipped .camera_stream__wrapper { -webkit-transform: rotateY(-180deg); -moz-transform: rotateY(-180deg); -ms-transform: rotateY(-180deg); -o-transform: rotateY(-180deg); transform: rotateY(-180deg); }
 
-.camera_stream__front, .camera_stream__back { position: absolute; width: 100%; height: 100%; top: 0; left: 0; backface-visibility: hidden; overflow: hidden; border-radius: 3px; }
+.camera_stream__front, .camera_stream__back { position: absolute; width: 100%; height: 100%; top: 0; left: 0; overflow: hidden; border-radius: 3px; -webkit-backface-visibility: hidden; -moz-backface-visibility: hidden; -ms-backface-visibility: hidden; -o-backface-visibility: hidden; backface-visibility: hidden; }
 
-.camera_stream__front { z-index: 2; transform: rotateY(0deg); }
+.camera_stream__front { z-index: 2; -webkit-transform: rotateY(0deg); -moz-transform: rotateY(0deg); -ms-transform: rotateY(0deg); -o-transform: rotateY(0deg); transform: rotateY(0deg); }
 
-.camera_stream__back { transform: rotateY(180deg); }
+.camera_stream__back { -webkit-transform: rotateY(180deg); -moz-transform: rotateY(180deg); -ms-transform: rotateY(180deg); -o-transform: rotateY(180deg); transform: rotateY(180deg); }
 
-.camera_stream__video { max-width: 100%; margin-left: auto; margin-right: auto; display: none; left: 0; right: 0; top: 0; border-radius: 4px; overflow: hidden; }
+.camera_stream__video { max-width: 100%; margin-left: auto; margin-right: auto; display: none; left: 0; right: 0; top: 0; border-radius: 4px; overflow: hidden; position: absolute; width: 100%; height: 100%; object-fit: cover; }
 
 .camera_stream__video.visible { display: block; }
 
@@ -1909,7 +1909,7 @@ label.error { display: none !important; }
 
 .camera_stream__back_btn .icon { font-size: 30px; font-size: 1.875rem; margin-top: -5px; margin-top: -0.3125rem; margin-bottom: -5px; margin-bottom: -0.3125rem; }
 
-.camera_stream__snap { position: absolute; max-width: 100%; max-height: 100%; top: 0; left: 0; width: 100%; display: none; border-radius: 4px; z-index: 20; }
+.camera_stream__snap { position: absolute; width: 100%; height: 100%; top: 0; left: 0; display: none; border-radius: 4px; z-index: 20; background-position: center; background-repeat: no-repeat; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; }
 
 .camera_stream__snap.visible { display: block; }
 

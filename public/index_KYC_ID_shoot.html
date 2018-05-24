@@ -158,6 +158,17 @@
           </div>
           <p class="lead">Lykke requires additional user information before any deposits or withdrawals can be made in order to meet KYC/AML legal requirement multiple tier levels of funding limits, each with increasing amounts of deposit/withdraw limits.</p>
 
+
+
+          <input type="hidden" class="x_use_photo_front_side" value="false" />
+          <input type="hidden" class="x_use_photo_back_side" value="false" />
+          <input type="hidden" class="x_use_file" value="false" />
+
+          <input type="hidden" class="x_photo_front_side" value="" />
+          <input type="hidden" class="x_photo_back_side" value="" />
+          <input type="file" class="x_file_upload" accept=".jpg,.jpeg,.png,.pdf" v-on:change="validateFile($event, documentAddress.file)" style="display: none">
+
+
           <div class="steps_list">
             <div class="steps_item steps_item--active">
               <div class="steps_item__title">Photo of your ID</div>
@@ -167,7 +178,7 @@
                     <div class="col-sm-4">
                       <div class="form-group">
                         <div class="radio btn-block">
-                          <input type="radio" name="doc" id="radio" class="radio__control" value="Passport" checked>
+                          <input type="radio" name="doc" id="radio" class="radio__control" value="Passport" v-model="documents.TypeId">
                           <label for="radio" class="form-control control-label radio__label">
                             <i class="icon icon--passport"></i>
                             Passport
@@ -178,7 +189,7 @@
                     <div class="col-sm-4">
                       <div class="form-group">
                         <div class="radio btn-block">
-                          <input type="radio" name="doc" id="radio1" class="radio__control" value="ID">
+                          <input type="radio" name="doc" id="radio1" class="radio__control" value="IdCard" v-model="documents.TypeId">
                           <label for="radio1" class="form-control control-label radio__label">
                             <i class="icon icon--id"></i>
                             ID
@@ -189,7 +200,7 @@
                     <div class="col-sm-4">
                       <div class="form-group">
                         <div class="radio btn-block">
-                          <input type="radio" name="doc" id="radio2" class="radio__control" value="DriverLicense">
+                          <input type="radio" name="doc" id="radio2" class="radio__control" value="DrivingLicense" v-model="documents.TypeId">
                           <label for="radio2" class="form-control control-label radio__label">
                             <i class="icon icon--driver_license"></i>
                             Driver license
@@ -200,7 +211,19 @@
                   </div>
                 </div>
 
-                <ul>
+                <ul v-if="documents.TypeId == 'Passport'">
+                  <li>Passport should display a photograph, full name and date of birth</li>
+                  <li>Image covering whole document should be well lit and in focus</li>
+                  <li>Passport and Proof of Address should be separate documents</li>
+                </ul>
+
+                <ul v-if="documents.TypeId == 'IdCard'">
+                  <li>ID card should display a photograph, full name and date of birth</li>
+                  <li>Image covering whole document should be well lit and in focus</li>
+                  <li>ID card and Proof of Address should be separate documents</li>
+                </ul>
+
+                <ul v-if="documents.TypeId == 'DrivingLicense'">
                   <li>Driving license should display a photograph, full name and date of birth</li>
                   <li>Image covering whole document should be well lit and in focus</li>
                   <li>Driving license and Proof of Address should be separate documents</li>
@@ -211,10 +234,10 @@
                     <div class="camera_stream__frame _camera_frame"></div>
                     <div class="camera_stream__wrapper">
                       <div class="camera_stream__front">
-                        <img class="camera_stream__snap camera_stream__snap--front _camera_snap">
+                        <div class="camera_stream__snap camera_stream__snap--front _camera_snap"></div>
                       </div>
                       <div class="camera_stream__back">
-                        <img class="camera_stream__snap camera_stream__snap--back _camera_snap_back">
+                        <div class="camera_stream__snap camera_stream__snap--back _camera_snap_back"></div>
                       </div>
                     </div>
                     <video class="camera_stream__video _camera_video" playsinline></video>
@@ -236,7 +259,7 @@
                 </div>
 
                 <div class="steps_item__button">
-                  <button class="btn btn--primary" type="button" disabled>Submit</button>
+                  <button class="btn btn--primary document_submit" id="document_submit_id" v-on:click="onSubmitId" type="button" disabled>Submit</button>
                 </div>
               </div>
             </div>
@@ -260,310 +283,14 @@
   </section>
 </article>
 
-<script src="/js/vendor/jquery.min.js"></script>
-<script src="/js/vendor/bootstrap.min.js"></script>
-<script src="/js/vendor/vue.min.js"></script>
+<script src="js/vendor/jquery.min.js"></script>
+<script src="js/vendor/bootstrap.min.js"></script>
+<script src="js/vendor/vue.min.js"></script>
 <!-- build:js js/functions.js -->
-<script src="/js/functions.js"></script>
-<script src="/js/camera.js"></script>
+<script src="js/functions.js"></script>
+<script src="js/camera.js"></script>
+<script src="js/ClientApp/main.js" asp-append-version="true" type="module"></script>
 <!-- endbuild -->
-
-<script>
-  var _this = "";
-
-  var app = new Vue({
-    el: "#webkycflow-vue-app",
-    data: {
-      documents: [],
-      kycStatus: "",
-
-      // Document ID
-      documentId: {
-        display: false,
-        useCamera: true
-      },
-
-      displayAddress: false,
-
-      // Document Address
-      documentAddress: {
-        display: false,
-        useCamera: false,
-        useFile: false,
-        hasFile: false,
-
-        file: {
-          name: "",
-          extension: "",
-          size: "",
-
-          reset: function () {
-            this.name = "";
-            this.extension = "";
-            this.size = "";
-          }
-        },
-
-        toggleCamera: function () {
-          this.useCamera = true;
-          this.useFile = false;
-          this.hasFile = false;
-          this.file.reset();
-
-          $(".x_use_file").val("false");
-        },
-
-        toggleFile: function () {
-          this.useCamera = false;
-          this.useFile = true;
-
-          document.getElementsByClassName("x_file_upload")[0].click();
-        },
-      },
-
-      // Document Selfie
-      documentSelfie: {
-        display: false,
-        useCamera: true
-      }
-    },
-    methods: {
-      convertBytes: function (x) {
-        let units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-        let l = 0, n = parseInt(x, 10) || 0;
-
-        while (n >= 1024 && ++l)
-          n = n / 1024;
-
-        return (n.toFixed(n >= 10 || l < 1 ? 0 : 1) + ' ' + units[l]);
-      },
-      getKycStatus: function () {
-        let result = "";
-
-        $.ajax({
-          url: '/api/documents/kycstatus', method: 'GET', type: 'json', async: false,
-          success: function (data) {
-            result = data;
-          }
-        });
-
-        return result;
-      },
-      uploadDocuments: function (docModel) {
-        var result = false;
-
-        $.ajax({
-          url: '/api/documents/upload', method: 'POST', data: docModel, type: 'json', async: false,
-          success: function () {
-            result = true;
-          }
-        });
-
-        return result;
-      },
-      onSubmitId: function () {
-        $("#document_submit_id").prop("disabled", true);
-        let frontSideResult = false, backSideResult = false;
-
-        let docFrontSide = {};
-        docFrontSide.DocumentName = _this.documents.TypeId;
-        docFrontSide.DocumentType = "";
-        docFrontSide.FileExtension = "png";
-        docFrontSide.Data = $(".x_photo_front_side").val();
-
-        let docBackSide = {};
-        docBackSide.DocumentName = _this.documents.TypeId;
-        docBackSide.DocumentType = "BackSide";
-        docBackSide.FileExtension = "png";
-        docBackSide.Data = $(".x_photo_back_side").val();
-
-        // frontSideResult = true;
-        // backSideResult = true;
-
-        frontSideResult = _this.uploadDocuments(docFrontSide);
-
-        if (_this.documents.TypeId != "Passport") {
-          backSideResult = _this.uploadDocuments(docBackSide);
-        }
-        else {
-          backSideResult = true;
-        }
-
-        if (frontSideResult && backSideResult) {
-          _this.documentId.display = false;
-
-          if (_this.documents.RequireAddress) {
-            _this.documentAddress.display = true;
-          }
-          else if (_this.documents.RequireSelfie) {
-            _this.documentSelfie.display = true;
-          }
-          else {
-
-          }
-        }
-        else {
-          $("#document_submit_id").prop("disabled", false);
-        }
-
-        $(".x_photo_front_side").val("");
-        $(".x_photo_back_side").val("");
-        $(".x_use_file").val("");
-        _this.documents.TypeId = "";
-      },
-      onSubmitAddress: function () {
-        _this.documents.TypeId = "";
-        $("#document_submit_address").prop("disabled", true);
-        let frontSideResult = false;
-
-        let docFrontSide = {};
-        docFrontSide.DocumentName = "ProofOfAddress";
-        docFrontSide.DocumentType = "";
-
-        // frontSideResult = true;
-
-        if (_this.documentAddress.hasFile) {
-          docFrontSide.FileExtension = _this.documentAddress.file.extension;
-        }
-        else {
-          docFrontSide.FileExtension = "png";
-        }
-
-        docFrontSide.Data = $(".x_photo_front_side").val();
-        frontSideResult = _this.uploadDocuments(docFrontSide);
-
-        if (frontSideResult) {
-          _this.documentAddress.display = false;
-
-          if (_this.documents.RequireSelfie) {
-            _this.documentSelfie.display = true;
-          }
-        }
-        else {
-          $("#document_submit_address").prop("disabled", false);
-        }
-
-      },
-      onSubmitSelfie: function () {
-        _this.documents.TypeId = "";
-        $("#document_submit_selfie").prop("disabled", true);
-        let frontSideResult = false, submitResult = false;
-
-        let docFrontSide = {};
-        docFrontSide.DocumentName = "Selfie";
-        docFrontSide.DocumentType = "";
-        docFrontSide.FileExtension = "png";
-        docFrontSide.Data = $(".x_photo_front_side").val();
-
-        frontSideResult = _this.uploadDocuments(docFrontSide);
-        // frontSideResult = true;
-
-        if (frontSideResult) {
-          $("#document_submit_selfie").prop("disabled", true);
-          _this.documentSelfie.display = false;
-
-          $.ajax({
-            url: '/api/documents/submit', method: 'POST', type: 'json', async: true,
-            success: function () {
-              _this.kycStatus = _this.getKycStatus();
-            },
-            error: function () {
-              _this.documentSelfie.display = true;
-              $("#document_submit_selfie").prop("disabled", false);
-
-              _this.kycStatus = _this.getKycStatus();
-            }
-          });
-        }
-        else {
-          $("#document_submit_selfie").prop("disabled", false);
-        }
-      },
-      getDocuments: function () {
-        let result = "";
-
-        $.ajax({
-          url: '/api/documents/list', method: 'GET', type: 'json', async: false,
-          success: function (data) {
-            result = data;
-          }
-        });
-
-        return result;
-      },
-      validateFile: function (event, fileInfo) {
-        var file = event.target.files[0];
-
-        if (file.size > 3145728) {
-          file.value = "";
-          fileInfo.reset();
-
-          $(".document_submit").prop("disabled", true);
-
-          $(".x_use_file").val("false");
-          this.documentAddress.hasFile = false;
-
-          alert('The maximum file size is 3MB');
-          return false;
-        }
-
-        var fileName = file.name;
-        var idxDot = fileName.lastIndexOf(".") + 1;
-        var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
-
-        if (extFile == "jpg" || extFile == "jpeg" || extFile == "png" || extFile == "pdf") {
-          this.documentAddress.hasFile = true;
-          $(".document_submit").prop("disabled", false);
-
-          fileInfo.name = file.name;
-          fileInfo.extension = extFile;
-          fileInfo.size = this.convertBytes(file.size);
-
-          var reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = function () {
-            $(".x_photo_front_side").val(reader.result);
-          };
-
-          $(".x_use_file").val("true");
-        }
-        else {
-          file.value = "";
-          fileInfo.reset();
-
-          $(".document_submit").prop("disabled", true);
-
-          $(".x_use_file").val("false");
-          this.documentAddress.hasFile = false;
-
-          alert("Only jpg, jpeg, png and pdf files are allowed!");
-          return false;
-        }
-      }
-    },
-    mounted: function () {
-      _this = this;
-
-      _this.kycStatus = _this.getKycStatus();
-      _this.documents = _this.getDocuments();
-
-      // if (_this.documents == "") location = "/404";
-
-      if (new Boolean(_this.documents.RequireId) == true) {
-        _this.documentId.display = true;
-      }
-      else if (new Boolean(_this.documents.RequireAddress) == true) {
-        _this.documentAddress.display = true;
-      }
-      else if (new Boolean(_this.documents.RequireSelfie) == true) {
-        _this.documentSelfie.display = true;
-      }
-    },
-    updated: function () {
-      initCameraModule();
-    }
-  });
-</script>
 
 </body>
 </html>

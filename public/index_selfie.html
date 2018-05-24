@@ -279,7 +279,7 @@
                     <div class="camera_stream__frame _camera_frame hide"></div>
                     <div class="camera_stream__wrapper">
                       <div class="camera_stream__front">
-                        <img class="camera_stream__snap camera_stream__snap--front _camera_snap">
+                        <div class="camera_stream__snap camera_stream__snap--front _camera_snap"></div>
                       </div>
                     </div>
                     <video class="camera_stream__video _camera_video" playsinline></video>
@@ -311,43 +311,12 @@
 
 <script src="/js/vendor/jquery.min.js"></script>
 <script src="/js/vendor/bootstrap.min.js"></script>
+<script src="js/vendor/vue.min.js"></script>
 <!-- build:js js/functions.js -->
 <script src="/js/functions.js"></script>
 <script src="/js/camera.js"></script>
+<script src="js/ClientApp/main.js" asp-append-version="true" type="module"></script>
 <!-- endbuild -->
-
-<script>
-  $(function () {
-    UpdateDocType();
-
-    $('input[name=doc]').on('change', function () {
-      UpdateDocType();
-    });
-
-    function UpdateDocType() {
-      var type = $('input[name=doc]:checked').val();
-      console.log(type);
-
-      if (type == "Passport") {
-        $("#passport-row").show();
-        $("#id-row").hide();
-        $("#driverlicense-row").hide();
-      }
-
-      if (type == "ID") {
-        $("#passport-row").hide();
-        $("#id-row").show();
-        $("#driverlicense-row").hide();
-      }
-
-      if (type == "DriverLicense") {
-        $("#passport-row").hide();
-        $("#id-row").hide();
-        $("#driverlicense-row").show();
-      }
-    }
-  })
-</script>
 
 </body>
 </html>
