@@ -136,6 +136,18 @@
     height: 100%;
     object-fit: cover;
 
+    video {
+      left: 0;
+      right: 0;
+      top: 0;
+      border-radius: 4px;
+      overflow: hidden;
+      position: absolute;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover;
+    }
+
     &.visible {
       display: block;
     }

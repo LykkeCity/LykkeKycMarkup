@@ -44,81 +44,100 @@ function initCameraModule() {
       navigator.mozGetUserMedia ||
       navigator.msGetUserMedia;
 
+    Webcam.on('load', function () {
+      showVideo();
+    })
+    Webcam.set({
+      width: '100%',
+      height: '100%',
+      dest_width: 640,
+      dest_height: 480,
+      image_format: 'jpeg',
+      jpeg_quality: 90,
+      swfURL: '~/js/webcam/webcam.swf'
+    });
+    Webcam.attach(video);
+
+
     function takePhoto() {
-      var snap = takeSnapshot();
+      Webcam.snap( function(data_uri) {
+        var snap = data_uri;
+        console.log('takePhoto')
+        // Show image.
+        frame.classList.remove("visible");
 
-      // Show image.
-      frame.classList.remove("visible");
+        // Enable delete and save buttons
+        controls.classList.add("visible");
+        take_photo_btn.classList.remove("visible");
+        camera_container.classList.add('camera_stream--snap');
+        if (camera_rotate_btn && backSideEnabled) camera_rotate_btn.classList.add("visible");
 
-      // Enable delete and save buttons
-      controls.classList.add("visible");
-      take_photo_btn.classList.remove("visible");
-      camera_container.classList.add('camera_stream--snap');
-      if (camera_rotate_btn && backSideEnabled) camera_rotate_btn.classList.add("visible");
+        // Set the href attribute of the download button to the snap url.
+        // Pause video playback of stream.
 
-      // Set the href attribute of the download button to the snap url.
-      // Pause video playback of stream.
+        console.log(side);
 
-      console.log(side);
+        if (side === 'front') {
+          $(".x_photo_front_side").val("");
+          $(".x_use_photo_front_side").val("true");
 
-      if (side === 'front') {
-        $(".x_photo_front_side").val("");
-        $(".x_use_photo_front_side").val("true");
+          var frontSnap = snap;
 
-        var frontSnap = snap;
+          isFrontSnapExist = true;
+          image.setAttribute("style", "background-image: url("+ frontSnap +");");
+          image.classList.add("visible");
+          savePhotoSrc = frontSnap;
 
-        isFrontSnapExist = true;
-        image.setAttribute("style", "background-image: url("+ frontSnap +");");
-        image.classList.add("visible");
-        savePhotoSrc = frontSnap;
+          $(".x_photo_front_side").val(frontSnap);
 
-        $(".x_photo_front_side").val(frontSnap);
+          var doctype = $(".x_document_typeid").val();
 
-        var doctype = $(".x_document_typeid").val();
-
-        if (doctype === "Passport" || doctype === "") {
-          $(".document_submit").prop("disabled", false);
-        }
-        else {
-          var backSide = $(".x_photo_back_side").val();
-          var useBackSide = $(".x_use_photo_back_side").val();
-
-          if (useBackSide === "true" && backSide !== "") {
+          if (doctype === "Passport" || doctype === "") {
             $(".document_submit").prop("disabled", false);
           }
           else {
-            $(".document_submit").prop("disabled", true);
+            var backSide = $(".x_photo_back_side").val();
+            var useBackSide = $(".x_use_photo_back_side").val();
+
+            if (useBackSide === "true" && backSide !== "") {
+              $(".document_submit").prop("disabled", false);
+            }
+            else {
+              $(".document_submit").prop("disabled", true);
+            }
+          }
+
+        } else {
+          $(".x_photo_back_side").val("");
+          $(".x_use_photo_back_side").val("true");
+
+          var backSnap = snap;
+
+          imageBack.setAttribute("style", "background-image: url("+ backSnap +");");
+          imageBack.classList.add("visible");
+          isBackSnapExist = true;
+          saveBackPhotoSrc = backSnap;
+
+          $(".x_photo_back_side").val(backSnap);
+
+          var frontSide = $(".x_photo_front_side").val();
+          var useFrontSide = $(".x_use_photo_front_side").val();
+
+          if (useFrontSide === "true" && frontSide !== "") {
+            $(".document_submit").prop("disabled", false);
           }
         }
 
-      } else {
-        $(".x_photo_back_side").val("");
-        $(".x_use_photo_back_side").val("true");
-
-        var backSnap = snap;
-
-        imageBack.setAttribute("style", "background-image: url("+ backSnap +");");
-        imageBack.classList.add("visible");
-        isBackSnapExist = true;
-        saveBackPhotoSrc = backSnap;
-
-        $(".x_photo_back_side").val(backSnap);
-
-        var frontSide = $(".x_photo_front_side").val();
-        var useFrontSide = $(".x_use_photo_front_side").val();
-
-        if (useFrontSide === "true" && frontSide !== "") {
-          $(".document_submit").prop("disabled", false);
+        if (isFrontSnapExist && isBackSnapExist) {
+          video.classList.remove("visible");
+          Webcam.freeze();
         }
-      }
-
-      if (isFrontSnapExist && isBackSnapExist) {
-        video.classList.remove("visible");
-        video.pause();
-      }
+      } );
     }
 
     function showVideo() {
+      Webcam.unfreeze();
+
       controls.classList.remove("visible");
       frame.classList.add("visible");
       take_photo_btn.classList.add("visible");
@@ -126,11 +145,10 @@ function initCameraModule() {
       error_message.classList.remove("visible");
     }
 
-    function takeSnapshot() {
+    function setSnapshotSize() {
       // Here we're using a trick that involves a hidden canvas element.
 
-      var hidden_canvas = document.querySelector("canvas"),
-        context = hidden_canvas.getContext("2d");
+      var hidden_canvas = document.querySelector("canvas");
 
       var width = video.videoWidth,
         height = video.videoHeight;
@@ -139,17 +157,11 @@ function initCameraModule() {
         // Setup a canvas with the same dimensions as the video.
         hidden_canvas.width = width;
         hidden_canvas.height = height;
-
-        // Make a copy of the current frame in the video on the canvas.
-        context.drawImage(video, 0, 0, width, height);
-
-        // Turn the canvas image into a dataURL that can be used as a src for our photo.
-        return hidden_canvas.toDataURL("image/png");
       }
     }
 
     function deletePhoto() {
-      video.play();
+      showVideo()
       toggleUIOnDelete()
 
       $(".document_submit").prop("disabled", true);
@@ -177,6 +189,8 @@ function initCameraModule() {
     }
 
     function toggleUIOnDelete() {
+      video.classList.add("visible");
+
       if (isBackSnapExist && isFrontSnapExist) {
         take_photo_btn.classList.add("visible");
         controls.classList.remove("visible");
@@ -212,41 +226,9 @@ function initCameraModule() {
       image.classList.remove("visible");
     }
 
-    function initCamera() {
-      // The getUserMedia interface is used for handling camera input.
-      // Some browsers need a prefix so here we're covering all the options
-
-      if (navigator.getMedia) {
-        navigator.getMedia(
-          { audio: false, video: { facingMode: "user" } },
-          function (stream) {
-            localStream = stream;
-            video.srcObject = stream;
-            video.onloadedmetadata = function (e) {
-              video.play();
-              video.onplay = function () {
-                showVideo();
-              };
-            };
-          },
-          function (err) {
-            displayErrorMessage(
-              "There was an error with accessing the camera stream: " +
-              err.name +
-              ". Try to use another browser or Lykke Wallet App.",
-              err
-            );
-            console.log("The following error occurred: " + err.name);
-          }
-        );
-      } else {
-        displayErrorMessage(
-          "Your browser doesn't support the navigator.getUserMedia interface. Try to use another browser or Lykke Wallet App."
-        );
-      }
-    }
-
     function clearAll() {
+      showVideo();
+
       $("._rotate_side ._text").text('Back side');
 
       isFrontSnapExist = false;
@@ -268,8 +250,6 @@ function initCameraModule() {
 
       $(".x_photo_back_side").val("");
       $(".x_use_photo_back_side").val("false");
-
-      video.play();
 
       $(".document_submit").prop("disabled", true);
     }
@@ -355,7 +335,7 @@ function initCameraModule() {
         clearAll();
       }
     });
-
-    initCamera();
   }
 }
+
+initCameraModule()
