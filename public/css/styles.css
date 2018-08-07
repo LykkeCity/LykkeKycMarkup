@@ -2130,3 +2130,24 @@ body { padding-bottom: 20px; }
 .page__header { margin-bottom: 60px; margin-bottom: 3.75rem; }
 
 .page__title + .page__subtitle { color: #657180 !important; margin-top: 20px; margin-top: 1.25rem; }
+
+.loader_container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 999999; background-color: rgba(63, 77, 96, 0.6); display: none; }
+
+.body--loading .loader_container { display: block; }
+
+.l_spinner { animation: rotator 1.4s linear infinite; position: absolute; left: 50%; top: 50%; -webkit-transform: translate(-50%, -50%); -moz-transform: translate(-50%, -50%); -ms-transform: translate(-50%, -50%); -o-transform: translate(-50%, -50%); transform: translate(-50%, -50%); }
+
+@keyframes rotator { 0% { transform: rotate(0deg); }
+  100% { transform: rotate(270deg); } }
+
+.l_path { stroke-dasharray: 187; stroke-dashoffset: 0; transform-origin: center; animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite; }
+
+@keyframes colors { 0% { stroke: #ff9100; }
+  50% { stroke: #ff0029; }
+  100% { stroke: #ab00ff; } }
+
+@keyframes dash { 0% { stroke-dashoffset: 187; }
+  50% { stroke-dashoffset: 46.75;
+    transform: rotate(135deg); }
+  100% { stroke-dashoffset: 187;
+    transform: rotate(450deg); } }

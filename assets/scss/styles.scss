@@ -70,3 +70,65 @@ body {
     @include rem(margin-top, 20px);
   }
 }
+
+
+.loader_container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999999;
+  background-color: rgba($secondary, .6);
+  display: none;
+
+  .body--loading & {
+    display: block;
+  }
+}
+
+
+$offset: 187;
+$duration: 1.4s;
+
+.l_spinner {
+  animation: rotator $duration linear infinite;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  @include transform(translate(-50%, -50%))
+}
+
+@keyframes rotator {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(270deg); }
+}
+
+
+.l_path {
+  stroke-dasharray: $offset;
+  stroke-dashoffset: 0;
+  transform-origin: center;
+  animation:
+    dash $duration ease-in-out infinite,
+    colors ($duration*4) ease-in-out infinite;
+}
+
+@keyframes colors {
+  0% { stroke: #ff9100; }
+  50% { stroke: #ff0029; }
+  100% { stroke: #ab00ff; }
+}
+
+@keyframes dash {
+  0% { stroke-dashoffset: $offset; }
+  50% {
+    stroke-dashoffset: $offset/4;
+    transform:rotate(135deg);
+  }
+  100% {
+    stroke-dashoffset: $offset;
+    transform:rotate(450deg);
+  }
+}

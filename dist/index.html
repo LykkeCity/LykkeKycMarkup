@@ -198,7 +198,7 @@
                 </div>
 
                 <div class="steps_item__button">
-                  <button class="btn btn--primary" type="button">Submit</button>
+                  <button class="btn btn--primary _submit_loader" type="button">Submit</button>
                 </div>
               </div>
             </div>
@@ -214,12 +214,24 @@
   </section>
 </article>
 
+<div class="loader_container">
+  <svg class="l_spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+    <circle class="l_path" fill="none" stroke-width="3" cx="33" cy="33" r="30"></circle>
+  </svg>
+</div>
+
 <script src="/js/vendor/jquery.min.js"></script>
 <script src="/js/vendor/bootstrap.min.js"></script>
 <!-- build:js js/functions.js -->
 <script src="/js/functions.js"></script>
 <script src="/js/camera.js"></script>
 <!-- endbuild -->
+
+<script>
+  $('._submit_loader').on('click', function () {
+    $('body').addClass('body--loading')
+  })
+</script>
 
 </body>
 </html>
